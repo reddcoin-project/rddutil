@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 /*
-Package btcutil provides bitcoin-specific convenience functions and types.
+Package rddutil provides bitcoin-specific convenience functions and types.
 
 Block Overview
 
@@ -23,11 +23,11 @@ Base58 Usage
 
 To decode a base58 string:
 
- rawData := btcutil.Base58Decode(encodedData)
+ rawData := rddutil.Base58Decode(encodedData)
 
 Similarly, to encode the same data:
 
- encodedData := btcutil.Base58Encode(rawData)
+ encodedData := rddutil.Base58Encode(rawData)
 
 */
-package btcutil
+package rddutil

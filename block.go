@@ -2,14 +2,14 @@
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
-package btcutil
+package rddutil
 
 import (
 	"bytes"
 	"fmt"
 	"io"
 
-	"github.com/conformal/btcwire"
+	"github.com/reddcoin-project/rddwire"
 )
 
 // OutOfRangeError describes an error due to accessing an element that is out
@@ -31,22 +31,22 @@ func (e OutOfRangeError) Error() string {
 // transactions on their first access so subsequent accesses don't have to
 // repeat the relatively expensive hashing operations.
 type Block struct {
-	msgBlock        *btcwire.MsgBlock // Underlying MsgBlock
+	msgBlock        *rddwire.MsgBlock // Underlying MsgBlock
 	serializedBlock []byte            // Serialized bytes for the block
-	blockSha        *btcwire.ShaHash  // Cached block hash
+	blockSha        *rddwire.ShaHash  // Cached block hash
 	blockHeight     int64             // Height in the main block chain
 	transactions    []*Tx             // Transactions
 	txnsGenerated   bool              // ALL wrapped transactions generated
 }
 
-// MsgBlock returns the underlying btcwire.MsgBlock for the Block.
-func (b *Block) MsgBlock() *btcwire.MsgBlock {
+// MsgBlock returns the underlying rddwire.MsgBlock for the Block.
+func (b *Block) MsgBlock() *rddwire.MsgBlock {
 	// Return the cached block.
 	return b.msgBlock
 }
 
 // Bytes returns the serialized bytes for the Block.  This is equivalent to
-// calling Serialize on the underlying btcwire.MsgBlock, however it caches the
+// calling Serialize on the underlying rddwire.MsgBlock, however it caches the
 // result so subsequent calls are more efficient.
 func (b *Block) Bytes() ([]byte, error) {
 	// Return the cached serialized bytes if it has already been generated.
@@ -68,9 +68,9 @@ func (b *Block) Bytes() ([]byte, error) {
 }
 
 // Sha returns the block identifier hash for the Block.  This is equivalent to
-// calling BlockSha on the underlying btcwire.MsgBlock, however it caches the
+// calling BlockSha on the underlying rddwire.MsgBlock, however it caches the
 // result so subsequent calls are more efficient.
-func (b *Block) Sha() (*btcwire.ShaHash, error) {
+func (b *Block) Sha() (*rddwire.ShaHash, error) {
 	// Return the cached block hash if it has already been generated.
 	if b.blockSha != nil {
 		return b.blockSha, nil
@@ -85,11 +85,11 @@ func (b *Block) Sha() (*btcwire.ShaHash, error) {
 	return &sha, nil
 }
 
-// Tx returns a wrapped transaction (btcutil.Tx) for the transaction at the
+// Tx returns a wrapped transaction (rddutil.Tx) for the transaction at the
 // specified index in the Block.  The supplied index is 0 based.  That is to
 // say, the first transaction in the block is txNum 0.  This is nearly
-// equivalent to accessing the raw transaction (btcwire.MsgTx) from the
-// underlying btcwire.MsgBlock, however the wrapped transaction has some helpful
+// equivalent to accessing the raw transaction (rddwire.MsgTx) from the
+// underlying rddwire.MsgBlock, however the wrapped transaction has some helpful
 // properties such as caching the hash so subsequent calls are more efficient.
 func (b *Block) Tx(txNum int) (*Tx, error) {
 	// Ensure the requested transaction is in range.
@@ -117,10 +117,10 @@ func (b *Block) Tx(txNum int) (*Tx, error) {
 	return newTx, nil
 }
 
-// Transactions returns a slice of wrapped transactions (btcutil.Tx) for all
+// Transactions returns a slice of wrapped transactions (rddutil.Tx) for all
 // transactions in the Block.  This is nearly equivalent to accessing the raw
-// transactions (btcwire.MsgTx) in the underlying btcwire.MsgBlock, however it
-// instead provides easy access to wrapped versions (btcutil.Tx) of them.
+// transactions (rddwire.MsgTx) in the underlying rddwire.MsgBlock, however it
+// instead provides easy access to wrapped versions (rddutil.Tx) of them.
 func (b *Block) Transactions() []*Tx {
 	// Return transactions if they have ALL already been generated.  This
 	// flag is necessary because the wrapped transactions are lazily
@@ -151,9 +151,9 @@ func (b *Block) Transactions() []*Tx {
 // TxSha returns the hash for the requested transaction number in the Block.
 // The supplied index is 0 based.  That is to say, the first transaction in the
 // block is txNum 0.  This is equivalent to calling TxSha on the underlying
-// btcwire.MsgTx, however it caches the result so subsequent calls are more
+// rddwire.MsgTx, however it caches the result so subsequent calls are more
 // efficient.
-func (b *Block) TxSha(txNum int) (*btcwire.ShaHash, error) {
+func (b *Block) TxSha(txNum int) (*rddwire.ShaHash, error) {
 	// Attempt to get a wrapped transaction for the specified index.  It
 	// will be created lazily if needed or simply return the cached version
 	// if it has already been generated.
@@ -170,14 +170,14 @@ func (b *Block) TxSha(txNum int) (*btcwire.ShaHash, error) {
 // TxLoc returns the offsets and lengths of each transaction in a raw block.
 // It is used to allow fast indexing into transactions within the raw byte
 // stream.
-func (b *Block) TxLoc() ([]btcwire.TxLoc, error) {
+func (b *Block) TxLoc() ([]rddwire.TxLoc, error) {
 	rawMsg, err := b.Bytes()
 	if err != nil {
 		return nil, err
 	}
 	rbuf := bytes.NewBuffer(rawMsg)
 
-	var mblock btcwire.MsgBlock
+	var mblock rddwire.MsgBlock
 	txLocs, err := mblock.DeserializeTxLoc(rbuf)
 	if err != nil {
 		return nil, err
@@ -197,8 +197,8 @@ func (b *Block) SetHeight(height int64) {
 }
 
 // NewBlock returns a new instance of a bitcoin block given an underlying
-// btcwire.MsgBlock.  See Block.
-func NewBlock(msgBlock *btcwire.MsgBlock) *Block {
+// rddwire.MsgBlock.  See Block.
+func NewBlock(msgBlock *rddwire.MsgBlock) *Block {
 	return &Block{
 		msgBlock:    msgBlock,
 		blockHeight: BlockHeightUnknown,
@@ -221,7 +221,7 @@ func NewBlockFromBytes(serializedBlock []byte) (*Block, error) {
 // Reader to deserialize the block.  See Block.
 func NewBlockFromReader(r io.Reader) (*Block, error) {
 	// Deserialize the bytes into a MsgBlock.
-	var msgBlock btcwire.MsgBlock
+	var msgBlock rddwire.MsgBlock
 	err := msgBlock.Deserialize(r)
 	if err != nil {
 		return nil, err
@@ -235,8 +235,8 @@ func NewBlockFromReader(r io.Reader) (*Block, error) {
 }
 
 // NewBlockFromBlockAndBytes returns a new instance of a bitcoin block given
-// an underlying btcwire.MsgBlock and the serialized bytes for it.  See Block.
-func NewBlockFromBlockAndBytes(msgBlock *btcwire.MsgBlock, serializedBlock []byte) *Block {
+// an underlying rddwire.MsgBlock and the serialized bytes for it.  See Block.
+func NewBlockFromBlockAndBytes(msgBlock *rddwire.MsgBlock, serializedBlock []byte) *Block {
 	return &Block{
 		msgBlock:        msgBlock,
 		serializedBlock: serializedBlock,

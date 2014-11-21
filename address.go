@@ -2,7 +2,7 @@
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
-package btcutil
+package rddutil
 
 import (
 	"bytes"
@@ -11,8 +11,8 @@ import (
 
 	"code.google.com/p/go.crypto/ripemd160"
 	"github.com/conformal/btcec"
-	"github.com/conformal/btcnet"
-	"github.com/conformal/btcwire"
+	"github.com/reddcoin-project/rddnet"
+	"github.com/reddcoin-project/rddwire"
 )
 
 var (
@@ -23,7 +23,7 @@ var (
 	// ErrUnknownAddressType describes an error where an address can not
 	// decoded as a specific address type due to the string encoding
 	// begining with an identifier byte unknown to any standard or
-	// registered (via btcnet.Register) network.
+	// registered (via rddnet.Register) network.
 	ErrUnknownAddressType = errors.New("unknown address type")
 
 	// ErrAddressCollision describes an error where an address can not
@@ -45,7 +45,7 @@ func encodeAddress(hash160 []byte, netID byte) string {
 	b := make([]byte, 0, 1+ripemd160.Size+4)
 	b = append(b, netID)
 	b = append(b, hash160...)
-	cksum := btcwire.DoubleSha256(b)[:4]
+	cksum := rddwire.DoubleSha256(b)[:4]
 	b = append(b, cksum...)
 	return Base58Encode(b)
 }
@@ -77,7 +77,7 @@ type Address interface {
 
 	// IsForNet returns whether or not the address is associated with the
 	// passed bitcoin network.
-	IsForNet(*btcnet.Params) bool
+	IsForNet(*rddnet.Params) bool
 }
 
 // DecodeAddress decodes the string encoding of an address and returns
@@ -86,7 +86,7 @@ type Address interface {
 // The bitcoin network the address is associated with is extracted if possible.
 // When the address does not encode the network, such as in the case of a raw
 // public key, the address will be associated with the passed defaultNet.
-func DecodeAddress(addr string, defaultNet *btcnet.Params) (Address, error) {
+func DecodeAddress(addr string, defaultNet *rddnet.Params) (Address, error) {
 	// Serialized public keys are either 65 bytes (130 hex chars) if
 	// uncompressed/hybrid or 33 bytes (66 hex chars) if compressed.
 	if len(addr) == 130 || len(addr) == 66 {
@@ -104,14 +104,14 @@ func DecodeAddress(addr string, defaultNet *btcnet.Params) (Address, error) {
 		// Verify hash checksum.  Checksum is calculated as the first
 		// four bytes of double SHA256 of the network byte and hash.
 		tosum := decoded[:ripemd160.Size+1]
-		cksum := btcwire.DoubleSha256(tosum)[:4]
+		cksum := rddwire.DoubleSha256(tosum)[:4]
 		if !bytes.Equal(cksum, decoded[len(decoded)-4:]) {
 			return nil, ErrChecksumMismatch
 		}
 
 		netID := decoded[0]
-		isP2PKH := btcnet.IsPubKeyHashAddrID(netID)
-		isP2SH := btcnet.IsScriptHashAddrID(netID)
+		isP2PKH := rddnet.IsPubKeyHashAddrID(netID)
+		isP2SH := rddnet.IsScriptHashAddrID(netID)
 		switch hash160 := decoded[1 : ripemd160.Size+1]; {
 		case isP2PKH && isP2SH:
 			return nil, ErrAddressCollision
@@ -137,7 +137,7 @@ type AddressPubKeyHash struct {
 
 // NewAddressPubKeyHash returns a new AddressPubKeyHash.  pkHash must
 // be 20 bytes.
-func NewAddressPubKeyHash(pkHash []byte, net *btcnet.Params) (*AddressPubKeyHash, error) {
+func NewAddressPubKeyHash(pkHash []byte, net *rddnet.Params) (*AddressPubKeyHash, error) {
 	return newAddressPubKeyHash(pkHash, net.PubKeyHashAddrID)
 }
 
@@ -171,7 +171,7 @@ func (a *AddressPubKeyHash) ScriptAddress() []byte {
 
 // IsForNet returns whether or not the pay-to-pubkey-hash address is associated
 // with the passed bitcoin network.
-func (a *AddressPubKeyHash) IsForNet(net *btcnet.Params) bool {
+func (a *AddressPubKeyHash) IsForNet(net *rddnet.Params) bool {
 	return a.netID == net.PubKeyHashAddrID
 }
 
@@ -197,14 +197,14 @@ type AddressScriptHash struct {
 }
 
 // NewAddressScriptHash returns a new AddressScriptHash.
-func NewAddressScriptHash(serializedScript []byte, net *btcnet.Params) (*AddressScriptHash, error) {
+func NewAddressScriptHash(serializedScript []byte, net *rddnet.Params) (*AddressScriptHash, error) {
 	scriptHash := Hash160(serializedScript)
 	return newAddressScriptHashFromHash(scriptHash, net.ScriptHashAddrID)
 }
 
 // NewAddressScriptHashFromHash returns a new AddressScriptHash.  scriptHash
 // must be 20 bytes.
-func NewAddressScriptHashFromHash(scriptHash []byte, net *btcnet.Params) (*AddressScriptHash, error) {
+func NewAddressScriptHashFromHash(scriptHash []byte, net *rddnet.Params) (*AddressScriptHash, error) {
 	return newAddressScriptHashFromHash(scriptHash, net.ScriptHashAddrID)
 }
 
@@ -238,7 +238,7 @@ func (a *AddressScriptHash) ScriptAddress() []byte {
 
 // IsForNet returns whether or not the pay-to-script-hash address is associated
 // with the passed bitcoin network.
-func (a *AddressScriptHash) IsForNet(net *btcnet.Params) bool {
+func (a *AddressScriptHash) IsForNet(net *rddnet.Params) bool {
 	return a.netID == net.ScriptHashAddrID
 }
 
@@ -283,7 +283,7 @@ type AddressPubKey struct {
 // NewAddressPubKey returns a new AddressPubKey which represents a pay-to-pubkey
 // address.  The serializedPubKey parameter must be a valid pubkey and can be
 // uncompressed, compressed, or hybrid.
-func NewAddressPubKey(serializedPubKey []byte, net *btcnet.Params) (*AddressPubKey, error) {
+func NewAddressPubKey(serializedPubKey []byte, net *rddnet.Params) (*AddressPubKey, error) {
 	pubKey, err := btcec.ParsePubKey(serializedPubKey, btcec.S256())
 	if err != nil {
 		return nil, err
@@ -346,7 +346,7 @@ func (a *AddressPubKey) ScriptAddress() []byte {
 
 // IsForNet returns whether or not the pay-to-pubkey address is associated
 // with the passed bitcoin network.
-func (a *AddressPubKey) IsForNet(net *btcnet.Params) bool {
+func (a *AddressPubKey) IsForNet(net *rddnet.Params) bool {
 	return a.pubKeyHashID == net.PubKeyHashAddrID
 }
 

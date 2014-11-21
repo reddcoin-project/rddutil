@@ -2,13 +2,13 @@
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
-package btcutil
+package rddutil
 
 import (
 	"bytes"
 	"io"
 
-	"github.com/conformal/btcwire"
+	"github.com/reddcoin-project/rddwire"
 )
 
 // TxIndexUnknown is the value returned for a transaction index that is unknown.
@@ -21,21 +21,21 @@ const TxIndexUnknown = -1
 // transaction on its first access so subsequent accesses don't have to repeat
 // the relatively expensive hashing operations.
 type Tx struct {
-	msgTx   *btcwire.MsgTx   // Underlying MsgTx
-	txSha   *btcwire.ShaHash // Cached transaction hash
+	msgTx   *rddwire.MsgTx   // Underlying MsgTx
+	txSha   *rddwire.ShaHash // Cached transaction hash
 	txIndex int              // Position within a block or TxIndexUnknown
 }
 
-// MsgTx returns the underlying btcwire.MsgTx for the transaction.
-func (t *Tx) MsgTx() *btcwire.MsgTx {
+// MsgTx returns the underlying rddwire.MsgTx for the transaction.
+func (t *Tx) MsgTx() *rddwire.MsgTx {
 	// Return the cached transaction.
 	return t.msgTx
 }
 
 // Sha returns the hash of the transaction.  This is equivalent to
-// calling TxSha on the underlying btcwire.MsgTx, however it caches the
+// calling TxSha on the underlying rddwire.MsgTx, however it caches the
 // result so subsequent calls are more efficient.
-func (t *Tx) Sha() *btcwire.ShaHash {
+func (t *Tx) Sha() *rddwire.ShaHash {
 	// Return the cached hash if it has already been generated.
 	if t.txSha != nil {
 		return t.txSha
@@ -62,8 +62,8 @@ func (t *Tx) SetIndex(index int) {
 }
 
 // NewTx returns a new instance of a bitcoin transaction given an underlying
-// btcwire.MsgTx.  See Tx.
-func NewTx(msgTx *btcwire.MsgTx) *Tx {
+// rddwire.MsgTx.  See Tx.
+func NewTx(msgTx *rddwire.MsgTx) *Tx {
 	return &Tx{
 		msgTx:   msgTx,
 		txIndex: TxIndexUnknown,
@@ -81,7 +81,7 @@ func NewTxFromBytes(serializedTx []byte) (*Tx, error) {
 // Reader to deserialize the transaction.  See Tx.
 func NewTxFromReader(r io.Reader) (*Tx, error) {
 	// Deserialize the bytes into a MsgTx.
-	var msgTx btcwire.MsgTx
+	var msgTx rddwire.MsgTx
 	err := msgTx.Deserialize(r)
 	if err != nil {
 		return nil, err

@@ -2,15 +2,15 @@
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
-package btcutil
+package rddutil
 
 import (
 	"bytes"
 	"errors"
 
 	"github.com/conformal/btcec"
-	"github.com/conformal/btcnet"
-	"github.com/conformal/btcwire"
+	"github.com/reddcoin-project/rddnet"
+	"github.com/reddcoin-project/rddwire"
 )
 
 // ErrMalformedPrivateKey describes an error where a WIF-encoded private
@@ -48,7 +48,7 @@ type WIF struct {
 // as a string encoded in the Wallet Import Format.  The compress argument
 // specifies whether the address intended to be imported or exported was created
 // by serializing the public key compressed rather than uncompressed.
-func NewWIF(privKey *btcec.PrivateKey, net *btcnet.Params, compress bool) (*WIF, error) {
+func NewWIF(privKey *btcec.PrivateKey, net *rddnet.Params, compress bool) (*WIF, error) {
 	if net == nil {
 		return nil, errors.New("no network")
 	}
@@ -57,7 +57,7 @@ func NewWIF(privKey *btcec.PrivateKey, net *btcnet.Params, compress bool) (*WIF,
 
 // IsForNet returns whether or not the decoded WIF structure is associated
 // with the passed bitcoin network.
-func (w *WIF) IsForNet(net *btcnet.Params) bool {
+func (w *WIF) IsForNet(net *rddnet.Params) bool {
 	return w.netID == net.PrivateKeyID
 }
 
@@ -109,7 +109,7 @@ func DecodeWIF(wif string) (*WIF, error) {
 	} else {
 		tosum = decoded[:1+btcec.PrivKeyBytesLen]
 	}
-	cksum := btcwire.DoubleSha256(tosum)[:4]
+	cksum := rddwire.DoubleSha256(tosum)[:4]
 	if !bytes.Equal(cksum, decoded[decodedLen-4:]) {
 		return nil, ErrChecksumMismatch
 	}
@@ -141,7 +141,7 @@ func (w *WIF) String() string {
 	if w.CompressPubKey {
 		a = append(a, compressMagic)
 	}
-	cksum := btcwire.DoubleSha256(a)[:4]
+	cksum := rddwire.DoubleSha256(a)[:4]
 	a = append(a, cksum...)
 	return Base58Encode(a)
 }

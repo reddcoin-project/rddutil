@@ -2,7 +2,7 @@
 // Use of this source code is governed by an ISC
 // license that can be found in the LICENSE file.
 
-package btcutil_test
+package rddutil_test
 
 import (
 	"bytes"
@@ -13,13 +13,13 @@ import (
 
 	"code.google.com/p/go.crypto/ripemd160"
 
-	"github.com/conformal/btcnet"
-	"github.com/conformal/btcutil"
-	"github.com/conformal/btcwire"
+	"github.com/reddcoin-project/rddutil"
+	"github.com/reddcoin-project/rddnet"
+	"github.com/reddcoin-project/rddwire"
 )
 
 // invalidNet is an invalid bitcoin network.
-const invalidNet = btcwire.BitcoinNet(0xffffffff)
+const invalidNet = rddwire.BitcoinNet(0xffffffff)
 
 func TestAddresses(t *testing.T) {
 	tests := []struct {
@@ -27,9 +27,9 @@ func TestAddresses(t *testing.T) {
 		addr    string
 		encoded string
 		valid   bool
-		result  btcutil.Address
-		f       func() (btcutil.Address, error)
-		net     *btcnet.Params
+		result  rddutil.Address
+		f       func() (rddutil.Address, error)
+		net     *rddnet.Params
 	}{
 		// Positive P2PKH tests.
 		{
@@ -37,54 +37,54 @@ func TestAddresses(t *testing.T) {
 			addr:    "1MirQ9bwyQcGVJPwKUgapu5ouK2E2Ey4gX",
 			encoded: "1MirQ9bwyQcGVJPwKUgapu5ouK2E2Ey4gX",
 			valid:   true,
-			result: btcutil.TstAddressPubKeyHash(
+			result: rddutil.TstAddressPubKeyHash(
 				[ripemd160.Size]byte{
 					0xe3, 0x4c, 0xce, 0x70, 0xc8, 0x63, 0x73, 0x27, 0x3e, 0xfc,
 					0xc5, 0x4c, 0xe7, 0xd2, 0xa4, 0x91, 0xbb, 0x4a, 0x0e, 0x84},
-				btcnet.MainNetParams.PubKeyHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddnet.MainNetParams.PubKeyHashAddrID),
+			f: func() (rddutil.Address, error) {
 				pkHash := []byte{
 					0xe3, 0x4c, 0xce, 0x70, 0xc8, 0x63, 0x73, 0x27, 0x3e, 0xfc,
 					0xc5, 0x4c, 0xe7, 0xd2, 0xa4, 0x91, 0xbb, 0x4a, 0x0e, 0x84}
-				return btcutil.NewAddressPubKeyHash(pkHash, &btcnet.MainNetParams)
+				return rddutil.NewAddressPubKeyHash(pkHash, &rddnet.MainNetParams)
 			},
-			net: &btcnet.MainNetParams,
+			net: &rddnet.MainNetParams,
 		},
 		{
 			name:    "mainnet p2pkh 2",
 			addr:    "12MzCDwodF9G1e7jfwLXfR164RNtx4BRVG",
 			encoded: "12MzCDwodF9G1e7jfwLXfR164RNtx4BRVG",
 			valid:   true,
-			result: btcutil.TstAddressPubKeyHash(
+			result: rddutil.TstAddressPubKeyHash(
 				[ripemd160.Size]byte{
 					0x0e, 0xf0, 0x30, 0x10, 0x7f, 0xd2, 0x6e, 0x0b, 0x6b, 0xf4,
 					0x05, 0x12, 0xbc, 0xa2, 0xce, 0xb1, 0xdd, 0x80, 0xad, 0xaa},
-				btcnet.MainNetParams.PubKeyHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddnet.MainNetParams.PubKeyHashAddrID),
+			f: func() (rddutil.Address, error) {
 				pkHash := []byte{
 					0x0e, 0xf0, 0x30, 0x10, 0x7f, 0xd2, 0x6e, 0x0b, 0x6b, 0xf4,
 					0x05, 0x12, 0xbc, 0xa2, 0xce, 0xb1, 0xdd, 0x80, 0xad, 0xaa}
-				return btcutil.NewAddressPubKeyHash(pkHash, &btcnet.MainNetParams)
+				return rddutil.NewAddressPubKeyHash(pkHash, &rddnet.MainNetParams)
 			},
-			net: &btcnet.MainNetParams,
+			net: &rddnet.MainNetParams,
 		},
 		{
 			name:    "testnet p2pkh",
 			addr:    "mrX9vMRYLfVy1BnZbc5gZjuyaqH3ZW2ZHz",
 			encoded: "mrX9vMRYLfVy1BnZbc5gZjuyaqH3ZW2ZHz",
 			valid:   true,
-			result: btcutil.TstAddressPubKeyHash(
+			result: rddutil.TstAddressPubKeyHash(
 				[ripemd160.Size]byte{
 					0x78, 0xb3, 0x16, 0xa0, 0x86, 0x47, 0xd5, 0xb7, 0x72, 0x83,
 					0xe5, 0x12, 0xd3, 0x60, 0x3f, 0x1f, 0x1c, 0x8d, 0xe6, 0x8f},
-				btcnet.TestNet3Params.PubKeyHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddnet.TestNet3Params.PubKeyHashAddrID),
+			f: func() (rddutil.Address, error) {
 				pkHash := []byte{
 					0x78, 0xb3, 0x16, 0xa0, 0x86, 0x47, 0xd5, 0xb7, 0x72, 0x83,
 					0xe5, 0x12, 0xd3, 0x60, 0x3f, 0x1f, 0x1c, 0x8d, 0xe6, 0x8f}
-				return btcutil.NewAddressPubKeyHash(pkHash, &btcnet.TestNet3Params)
+				return rddutil.NewAddressPubKeyHash(pkHash, &rddnet.TestNet3Params)
 			},
-			net: &btcnet.TestNet3Params,
+			net: &rddnet.TestNet3Params,
 		},
 
 		// Negative P2PKH tests.
@@ -92,12 +92,12 @@ func TestAddresses(t *testing.T) {
 			name:  "p2pkh wrong hash length",
 			addr:  "",
 			valid: false,
-			f: func() (btcutil.Address, error) {
+			f: func() (rddutil.Address, error) {
 				pkHash := []byte{
 					0x00, 0x0e, 0xf0, 0x30, 0x10, 0x7f, 0xd2, 0x6e, 0x0b, 0x6b,
 					0xf4, 0x05, 0x12, 0xbc, 0xa2, 0xce, 0xb1, 0xdd, 0x80, 0xad,
 					0xaa}
-				return btcutil.NewAddressPubKeyHash(pkHash, &btcnet.MainNetParams)
+				return rddutil.NewAddressPubKeyHash(pkHash, &rddnet.MainNetParams)
 			},
 		},
 		{
@@ -115,12 +115,12 @@ func TestAddresses(t *testing.T) {
 			addr:    "3QJmV3qfvL9SuYo34YihAf3sRCW3qSinyC",
 			encoded: "3QJmV3qfvL9SuYo34YihAf3sRCW3qSinyC",
 			valid:   true,
-			result: btcutil.TstAddressScriptHash(
+			result: rddutil.TstAddressScriptHash(
 				[ripemd160.Size]byte{
 					0xf8, 0x15, 0xb0, 0x36, 0xd9, 0xbb, 0xbc, 0xe5, 0xe9, 0xf2,
 					0xa0, 0x0a, 0xbd, 0x1b, 0xf3, 0xdc, 0x91, 0xe9, 0x55, 0x10},
-				btcnet.MainNetParams.ScriptHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddnet.MainNetParams.ScriptHashAddrID),
+			f: func() (rddutil.Address, error) {
 				script := []byte{
 					0x52, 0x41, 0x04, 0x91, 0xbb, 0xa2, 0x51, 0x09, 0x12, 0xa5,
 					0xbd, 0x37, 0xda, 0x1f, 0xb5, 0xb1, 0x67, 0x30, 0x10, 0xe4,
@@ -143,9 +143,9 @@ func TestAddresses(t *testing.T) {
 					0xdb, 0xfb, 0x1e, 0x75, 0x4e, 0x35, 0xfa, 0x1c, 0x78, 0x44,
 					0xc4, 0x1f, 0x32, 0x2a, 0x18, 0x63, 0xd4, 0x62, 0x13, 0x53,
 					0xae}
-				return btcutil.NewAddressScriptHash(script, &btcnet.MainNetParams)
+				return rddutil.NewAddressScriptHash(script, &rddnet.MainNetParams)
 			},
-			net: &btcnet.MainNetParams,
+			net: &rddnet.MainNetParams,
 		},
 		{
 			// Taken from transactions:
@@ -155,18 +155,18 @@ func TestAddresses(t *testing.T) {
 			addr:    "3NukJ6fYZJ5Kk8bPjycAnruZkE5Q7UW7i8",
 			encoded: "3NukJ6fYZJ5Kk8bPjycAnruZkE5Q7UW7i8",
 			valid:   true,
-			result: btcutil.TstAddressScriptHash(
+			result: rddutil.TstAddressScriptHash(
 				[ripemd160.Size]byte{
 					0xe8, 0xc3, 0x00, 0xc8, 0x79, 0x86, 0xef, 0xa8, 0x4c, 0x37,
 					0xc0, 0x51, 0x99, 0x29, 0x01, 0x9e, 0xf8, 0x6e, 0xb5, 0xb4},
-				btcnet.MainNetParams.ScriptHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddnet.MainNetParams.ScriptHashAddrID),
+			f: func() (rddutil.Address, error) {
 				hash := []byte{
 					0xe8, 0xc3, 0x00, 0xc8, 0x79, 0x86, 0xef, 0xa8, 0x4c, 0x37,
 					0xc0, 0x51, 0x99, 0x29, 0x01, 0x9e, 0xf8, 0x6e, 0xb5, 0xb4}
-				return btcutil.NewAddressScriptHashFromHash(hash, &btcnet.MainNetParams)
+				return rddutil.NewAddressScriptHashFromHash(hash, &rddnet.MainNetParams)
 			},
-			net: &btcnet.MainNetParams,
+			net: &rddnet.MainNetParams,
 		},
 		{
 			// Taken from bitcoind base58_keys_valid.
@@ -174,18 +174,18 @@ func TestAddresses(t *testing.T) {
 			addr:    "2NBFNJTktNa7GZusGbDbGKRZTxdK9VVez3n",
 			encoded: "2NBFNJTktNa7GZusGbDbGKRZTxdK9VVez3n",
 			valid:   true,
-			result: btcutil.TstAddressScriptHash(
+			result: rddutil.TstAddressScriptHash(
 				[ripemd160.Size]byte{
 					0xc5, 0x79, 0x34, 0x2c, 0x2c, 0x4c, 0x92, 0x20, 0x20, 0x5e,
 					0x2c, 0xdc, 0x28, 0x56, 0x17, 0x04, 0x0c, 0x92, 0x4a, 0x0a},
-				btcnet.TestNet3Params.ScriptHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddnet.TestNet3Params.ScriptHashAddrID),
+			f: func() (rddutil.Address, error) {
 				hash := []byte{
 					0xc5, 0x79, 0x34, 0x2c, 0x2c, 0x4c, 0x92, 0x20, 0x20, 0x5e,
 					0x2c, 0xdc, 0x28, 0x56, 0x17, 0x04, 0x0c, 0x92, 0x4a, 0x0a}
-				return btcutil.NewAddressScriptHashFromHash(hash, &btcnet.TestNet3Params)
+				return rddutil.NewAddressScriptHashFromHash(hash, &rddnet.TestNet3Params)
 			},
-			net: &btcnet.TestNet3Params,
+			net: &rddnet.TestNet3Params,
 		},
 
 		// Negative P2SH tests.
@@ -193,12 +193,12 @@ func TestAddresses(t *testing.T) {
 			name:  "p2sh wrong hash length",
 			addr:  "",
 			valid: false,
-			f: func() (btcutil.Address, error) {
+			f: func() (rddutil.Address, error) {
 				hash := []byte{
 					0x00, 0xf8, 0x15, 0xb0, 0x36, 0xd9, 0xbb, 0xbc, 0xe5, 0xe9,
 					0xf2, 0xa0, 0x0a, 0xbd, 0x1b, 0xf3, 0xdc, 0x91, 0xe9, 0x55,
 					0x10}
-				return btcutil.NewAddressScriptHashFromHash(hash, &btcnet.MainNetParams)
+				return rddutil.NewAddressScriptHashFromHash(hash, &rddnet.MainNetParams)
 			},
 		},
 
@@ -208,44 +208,44 @@ func TestAddresses(t *testing.T) {
 			addr:    "02192d74d0cb94344c9569c2e77901573d8d7903c3ebec3a957724895dca52c6b4",
 			encoded: "13CG6SJ3yHUXo4Cr2RY4THLLJrNFuG3gUg",
 			valid:   true,
-			result: btcutil.TstAddressPubKey(
+			result: rddutil.TstAddressPubKey(
 				[]byte{
 					0x02, 0x19, 0x2d, 0x74, 0xd0, 0xcb, 0x94, 0x34, 0x4c, 0x95,
 					0x69, 0xc2, 0xe7, 0x79, 0x01, 0x57, 0x3d, 0x8d, 0x79, 0x03,
 					0xc3, 0xeb, 0xec, 0x3a, 0x95, 0x77, 0x24, 0x89, 0x5d, 0xca,
 					0x52, 0xc6, 0xb4},
-				btcutil.PKFCompressed, btcnet.MainNetParams.PubKeyHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddutil.PKFCompressed, rddnet.MainNetParams.PubKeyHashAddrID),
+			f: func() (rddutil.Address, error) {
 				serializedPubKey := []byte{
 					0x02, 0x19, 0x2d, 0x74, 0xd0, 0xcb, 0x94, 0x34, 0x4c, 0x95,
 					0x69, 0xc2, 0xe7, 0x79, 0x01, 0x57, 0x3d, 0x8d, 0x79, 0x03,
 					0xc3, 0xeb, 0xec, 0x3a, 0x95, 0x77, 0x24, 0x89, 0x5d, 0xca,
 					0x52, 0xc6, 0xb4}
-				return btcutil.NewAddressPubKey(serializedPubKey, &btcnet.MainNetParams)
+				return rddutil.NewAddressPubKey(serializedPubKey, &rddnet.MainNetParams)
 			},
-			net: &btcnet.MainNetParams,
+			net: &rddnet.MainNetParams,
 		},
 		{
 			name:    "mainnet p2pk compressed (0x03)",
 			addr:    "03b0bd634234abbb1ba1e986e884185c61cf43e001f9137f23c2c409273eb16e65",
 			encoded: "15sHANNUBSh6nDp8XkDPmQcW6n3EFwmvE6",
 			valid:   true,
-			result: btcutil.TstAddressPubKey(
+			result: rddutil.TstAddressPubKey(
 				[]byte{
 					0x03, 0xb0, 0xbd, 0x63, 0x42, 0x34, 0xab, 0xbb, 0x1b, 0xa1,
 					0xe9, 0x86, 0xe8, 0x84, 0x18, 0x5c, 0x61, 0xcf, 0x43, 0xe0,
 					0x01, 0xf9, 0x13, 0x7f, 0x23, 0xc2, 0xc4, 0x09, 0x27, 0x3e,
 					0xb1, 0x6e, 0x65},
-				btcutil.PKFCompressed, btcnet.MainNetParams.PubKeyHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddutil.PKFCompressed, rddnet.MainNetParams.PubKeyHashAddrID),
+			f: func() (rddutil.Address, error) {
 				serializedPubKey := []byte{
 					0x03, 0xb0, 0xbd, 0x63, 0x42, 0x34, 0xab, 0xbb, 0x1b, 0xa1,
 					0xe9, 0x86, 0xe8, 0x84, 0x18, 0x5c, 0x61, 0xcf, 0x43, 0xe0,
 					0x01, 0xf9, 0x13, 0x7f, 0x23, 0xc2, 0xc4, 0x09, 0x27, 0x3e,
 					0xb1, 0x6e, 0x65}
-				return btcutil.NewAddressPubKey(serializedPubKey, &btcnet.MainNetParams)
+				return rddutil.NewAddressPubKey(serializedPubKey, &rddnet.MainNetParams)
 			},
-			net: &btcnet.MainNetParams,
+			net: &rddnet.MainNetParams,
 		},
 		{
 			name: "mainnet p2pk uncompressed (0x04)",
@@ -253,7 +253,7 @@ func TestAddresses(t *testing.T) {
 				"e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3",
 			encoded: "12cbQLTFMXRnSzktFkuoG3eHoMeFtpTu3S",
 			valid:   true,
-			result: btcutil.TstAddressPubKey(
+			result: rddutil.TstAddressPubKey(
 				[]byte{
 					0x04, 0x11, 0xdb, 0x93, 0xe1, 0xdc, 0xdb, 0x8a, 0x01, 0x6b,
 					0x49, 0x84, 0x0f, 0x8c, 0x53, 0xbc, 0x1e, 0xb6, 0x8a, 0x38,
@@ -262,8 +262,8 @@ func TestAddresses(t *testing.T) {
 					0xf9, 0x74, 0x44, 0x64, 0xf8, 0x2e, 0x16, 0x0b, 0xfa, 0x9b,
 					0x8b, 0x64, 0xf9, 0xd4, 0xc0, 0x3f, 0x99, 0x9b, 0x86, 0x43,
 					0xf6, 0x56, 0xb4, 0x12, 0xa3},
-				btcutil.PKFUncompressed, btcnet.MainNetParams.PubKeyHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddutil.PKFUncompressed, rddnet.MainNetParams.PubKeyHashAddrID),
+			f: func() (rddutil.Address, error) {
 				serializedPubKey := []byte{
 					0x04, 0x11, 0xdb, 0x93, 0xe1, 0xdc, 0xdb, 0x8a, 0x01, 0x6b,
 					0x49, 0x84, 0x0f, 0x8c, 0x53, 0xbc, 0x1e, 0xb6, 0x8a, 0x38,
@@ -272,9 +272,9 @@ func TestAddresses(t *testing.T) {
 					0xf9, 0x74, 0x44, 0x64, 0xf8, 0x2e, 0x16, 0x0b, 0xfa, 0x9b,
 					0x8b, 0x64, 0xf9, 0xd4, 0xc0, 0x3f, 0x99, 0x9b, 0x86, 0x43,
 					0xf6, 0x56, 0xb4, 0x12, 0xa3}
-				return btcutil.NewAddressPubKey(serializedPubKey, &btcnet.MainNetParams)
+				return rddutil.NewAddressPubKey(serializedPubKey, &rddnet.MainNetParams)
 			},
-			net: &btcnet.MainNetParams,
+			net: &rddnet.MainNetParams,
 		},
 		{
 			name: "mainnet p2pk hybrid (0x06)",
@@ -282,7 +282,7 @@ func TestAddresses(t *testing.T) {
 				"0d45264838c0bd96852662ce6a847b197376830160c6d2eb5e6a4c44d33f453e",
 			encoded: "1Ja5rs7XBZnK88EuLVcFqYGMEbBitzchmX",
 			valid:   true,
-			result: btcutil.TstAddressPubKey(
+			result: rddutil.TstAddressPubKey(
 				[]byte{
 					0x06, 0x19, 0x2d, 0x74, 0xd0, 0xcb, 0x94, 0x34, 0x4c, 0x95,
 					0x69, 0xc2, 0xe7, 0x79, 0x01, 0x57, 0x3d, 0x8d, 0x79, 0x03,
@@ -291,8 +291,8 @@ func TestAddresses(t *testing.T) {
 					0x96, 0x85, 0x26, 0x62, 0xce, 0x6a, 0x84, 0x7b, 0x19, 0x73,
 					0x76, 0x83, 0x01, 0x60, 0xc6, 0xd2, 0xeb, 0x5e, 0x6a, 0x4c,
 					0x44, 0xd3, 0x3f, 0x45, 0x3e},
-				btcutil.PKFHybrid, btcnet.MainNetParams.PubKeyHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddutil.PKFHybrid, rddnet.MainNetParams.PubKeyHashAddrID),
+			f: func() (rddutil.Address, error) {
 				serializedPubKey := []byte{
 					0x06, 0x19, 0x2d, 0x74, 0xd0, 0xcb, 0x94, 0x34, 0x4c, 0x95,
 					0x69, 0xc2, 0xe7, 0x79, 0x01, 0x57, 0x3d, 0x8d, 0x79, 0x03,
@@ -301,9 +301,9 @@ func TestAddresses(t *testing.T) {
 					0x96, 0x85, 0x26, 0x62, 0xce, 0x6a, 0x84, 0x7b, 0x19, 0x73,
 					0x76, 0x83, 0x01, 0x60, 0xc6, 0xd2, 0xeb, 0x5e, 0x6a, 0x4c,
 					0x44, 0xd3, 0x3f, 0x45, 0x3e}
-				return btcutil.NewAddressPubKey(serializedPubKey, &btcnet.MainNetParams)
+				return rddutil.NewAddressPubKey(serializedPubKey, &rddnet.MainNetParams)
 			},
-			net: &btcnet.MainNetParams,
+			net: &rddnet.MainNetParams,
 		},
 		{
 			name: "mainnet p2pk hybrid (0x07)",
@@ -311,7 +311,7 @@ func TestAddresses(t *testing.T) {
 				"37a576782eba668a7ef8bd3b3cfb1edb7117ab65129b8a2e681f3c1e0908ef7b",
 			encoded: "1ExqMmf6yMxcBMzHjbj41wbqYuqoX6uBLG",
 			valid:   true,
-			result: btcutil.TstAddressPubKey(
+			result: rddutil.TstAddressPubKey(
 				[]byte{
 					0x07, 0xb0, 0xbd, 0x63, 0x42, 0x34, 0xab, 0xbb, 0x1b, 0xa1,
 					0xe9, 0x86, 0xe8, 0x84, 0x18, 0x5c, 0x61, 0xcf, 0x43, 0xe0,
@@ -320,8 +320,8 @@ func TestAddresses(t *testing.T) {
 					0x8a, 0x7e, 0xf8, 0xbd, 0x3b, 0x3c, 0xfb, 0x1e, 0xdb, 0x71,
 					0x17, 0xab, 0x65, 0x12, 0x9b, 0x8a, 0x2e, 0x68, 0x1f, 0x3c,
 					0x1e, 0x09, 0x08, 0xef, 0x7b},
-				btcutil.PKFHybrid, btcnet.MainNetParams.PubKeyHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddutil.PKFHybrid, rddnet.MainNetParams.PubKeyHashAddrID),
+			f: func() (rddutil.Address, error) {
 				serializedPubKey := []byte{
 					0x07, 0xb0, 0xbd, 0x63, 0x42, 0x34, 0xab, 0xbb, 0x1b, 0xa1,
 					0xe9, 0x86, 0xe8, 0x84, 0x18, 0x5c, 0x61, 0xcf, 0x43, 0xe0,
@@ -330,53 +330,53 @@ func TestAddresses(t *testing.T) {
 					0x8a, 0x7e, 0xf8, 0xbd, 0x3b, 0x3c, 0xfb, 0x1e, 0xdb, 0x71,
 					0x17, 0xab, 0x65, 0x12, 0x9b, 0x8a, 0x2e, 0x68, 0x1f, 0x3c,
 					0x1e, 0x09, 0x08, 0xef, 0x7b}
-				return btcutil.NewAddressPubKey(serializedPubKey, &btcnet.MainNetParams)
+				return rddutil.NewAddressPubKey(serializedPubKey, &rddnet.MainNetParams)
 			},
-			net: &btcnet.MainNetParams,
+			net: &rddnet.MainNetParams,
 		},
 		{
 			name:    "testnet p2pk compressed (0x02)",
 			addr:    "02192d74d0cb94344c9569c2e77901573d8d7903c3ebec3a957724895dca52c6b4",
 			encoded: "mhiDPVP2nJunaAgTjzWSHCYfAqxxrxzjmo",
 			valid:   true,
-			result: btcutil.TstAddressPubKey(
+			result: rddutil.TstAddressPubKey(
 				[]byte{
 					0x02, 0x19, 0x2d, 0x74, 0xd0, 0xcb, 0x94, 0x34, 0x4c, 0x95,
 					0x69, 0xc2, 0xe7, 0x79, 0x01, 0x57, 0x3d, 0x8d, 0x79, 0x03,
 					0xc3, 0xeb, 0xec, 0x3a, 0x95, 0x77, 0x24, 0x89, 0x5d, 0xca,
 					0x52, 0xc6, 0xb4},
-				btcutil.PKFCompressed, btcnet.TestNet3Params.PubKeyHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddutil.PKFCompressed, rddnet.TestNet3Params.PubKeyHashAddrID),
+			f: func() (rddutil.Address, error) {
 				serializedPubKey := []byte{
 					0x02, 0x19, 0x2d, 0x74, 0xd0, 0xcb, 0x94, 0x34, 0x4c, 0x95,
 					0x69, 0xc2, 0xe7, 0x79, 0x01, 0x57, 0x3d, 0x8d, 0x79, 0x03,
 					0xc3, 0xeb, 0xec, 0x3a, 0x95, 0x77, 0x24, 0x89, 0x5d, 0xca,
 					0x52, 0xc6, 0xb4}
-				return btcutil.NewAddressPubKey(serializedPubKey, &btcnet.TestNet3Params)
+				return rddutil.NewAddressPubKey(serializedPubKey, &rddnet.TestNet3Params)
 			},
-			net: &btcnet.TestNet3Params,
+			net: &rddnet.TestNet3Params,
 		},
 		{
 			name:    "testnet p2pk compressed (0x03)",
 			addr:    "03b0bd634234abbb1ba1e986e884185c61cf43e001f9137f23c2c409273eb16e65",
 			encoded: "mkPETRTSzU8MZLHkFKBmbKppxmdw9qT42t",
 			valid:   true,
-			result: btcutil.TstAddressPubKey(
+			result: rddutil.TstAddressPubKey(
 				[]byte{
 					0x03, 0xb0, 0xbd, 0x63, 0x42, 0x34, 0xab, 0xbb, 0x1b, 0xa1,
 					0xe9, 0x86, 0xe8, 0x84, 0x18, 0x5c, 0x61, 0xcf, 0x43, 0xe0,
 					0x01, 0xf9, 0x13, 0x7f, 0x23, 0xc2, 0xc4, 0x09, 0x27, 0x3e,
 					0xb1, 0x6e, 0x65},
-				btcutil.PKFCompressed, btcnet.TestNet3Params.PubKeyHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddutil.PKFCompressed, rddnet.TestNet3Params.PubKeyHashAddrID),
+			f: func() (rddutil.Address, error) {
 				serializedPubKey := []byte{
 					0x03, 0xb0, 0xbd, 0x63, 0x42, 0x34, 0xab, 0xbb, 0x1b, 0xa1,
 					0xe9, 0x86, 0xe8, 0x84, 0x18, 0x5c, 0x61, 0xcf, 0x43, 0xe0,
 					0x01, 0xf9, 0x13, 0x7f, 0x23, 0xc2, 0xc4, 0x09, 0x27, 0x3e,
 					0xb1, 0x6e, 0x65}
-				return btcutil.NewAddressPubKey(serializedPubKey, &btcnet.TestNet3Params)
+				return rddutil.NewAddressPubKey(serializedPubKey, &rddnet.TestNet3Params)
 			},
-			net: &btcnet.TestNet3Params,
+			net: &rddnet.TestNet3Params,
 		},
 		{
 			name: "testnet p2pk uncompressed (0x04)",
@@ -384,7 +384,7 @@ func TestAddresses(t *testing.T) {
 				"cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3",
 			encoded: "mh8YhPYEAYs3E7EVyKtB5xrcfMExkkdEMF",
 			valid:   true,
-			result: btcutil.TstAddressPubKey(
+			result: rddutil.TstAddressPubKey(
 				[]byte{
 					0x04, 0x11, 0xdb, 0x93, 0xe1, 0xdc, 0xdb, 0x8a, 0x01, 0x6b,
 					0x49, 0x84, 0x0f, 0x8c, 0x53, 0xbc, 0x1e, 0xb6, 0x8a, 0x38,
@@ -393,8 +393,8 @@ func TestAddresses(t *testing.T) {
 					0xf9, 0x74, 0x44, 0x64, 0xf8, 0x2e, 0x16, 0x0b, 0xfa, 0x9b,
 					0x8b, 0x64, 0xf9, 0xd4, 0xc0, 0x3f, 0x99, 0x9b, 0x86, 0x43,
 					0xf6, 0x56, 0xb4, 0x12, 0xa3},
-				btcutil.PKFUncompressed, btcnet.TestNet3Params.PubKeyHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddutil.PKFUncompressed, rddnet.TestNet3Params.PubKeyHashAddrID),
+			f: func() (rddutil.Address, error) {
 				serializedPubKey := []byte{
 					0x04, 0x11, 0xdb, 0x93, 0xe1, 0xdc, 0xdb, 0x8a, 0x01, 0x6b,
 					0x49, 0x84, 0x0f, 0x8c, 0x53, 0xbc, 0x1e, 0xb6, 0x8a, 0x38,
@@ -403,9 +403,9 @@ func TestAddresses(t *testing.T) {
 					0xf9, 0x74, 0x44, 0x64, 0xf8, 0x2e, 0x16, 0x0b, 0xfa, 0x9b,
 					0x8b, 0x64, 0xf9, 0xd4, 0xc0, 0x3f, 0x99, 0x9b, 0x86, 0x43,
 					0xf6, 0x56, 0xb4, 0x12, 0xa3}
-				return btcutil.NewAddressPubKey(serializedPubKey, &btcnet.TestNet3Params)
+				return rddutil.NewAddressPubKey(serializedPubKey, &rddnet.TestNet3Params)
 			},
-			net: &btcnet.TestNet3Params,
+			net: &rddnet.TestNet3Params,
 		},
 		{
 			name: "testnet p2pk hybrid (0x06)",
@@ -413,7 +413,7 @@ func TestAddresses(t *testing.T) {
 				"40d45264838c0bd96852662ce6a847b197376830160c6d2eb5e6a4c44d33f453e",
 			encoded: "my639vCVzbDZuEiX44adfTUg6anRomZLEP",
 			valid:   true,
-			result: btcutil.TstAddressPubKey(
+			result: rddutil.TstAddressPubKey(
 				[]byte{
 					0x06, 0x19, 0x2d, 0x74, 0xd0, 0xcb, 0x94, 0x34, 0x4c, 0x95,
 					0x69, 0xc2, 0xe7, 0x79, 0x01, 0x57, 0x3d, 0x8d, 0x79, 0x03,
@@ -422,8 +422,8 @@ func TestAddresses(t *testing.T) {
 					0x96, 0x85, 0x26, 0x62, 0xce, 0x6a, 0x84, 0x7b, 0x19, 0x73,
 					0x76, 0x83, 0x01, 0x60, 0xc6, 0xd2, 0xeb, 0x5e, 0x6a, 0x4c,
 					0x44, 0xd3, 0x3f, 0x45, 0x3e},
-				btcutil.PKFHybrid, btcnet.TestNet3Params.PubKeyHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddutil.PKFHybrid, rddnet.TestNet3Params.PubKeyHashAddrID),
+			f: func() (rddutil.Address, error) {
 				serializedPubKey := []byte{
 					0x06, 0x19, 0x2d, 0x74, 0xd0, 0xcb, 0x94, 0x34, 0x4c, 0x95,
 					0x69, 0xc2, 0xe7, 0x79, 0x01, 0x57, 0x3d, 0x8d, 0x79, 0x03,
@@ -432,9 +432,9 @@ func TestAddresses(t *testing.T) {
 					0x96, 0x85, 0x26, 0x62, 0xce, 0x6a, 0x84, 0x7b, 0x19, 0x73,
 					0x76, 0x83, 0x01, 0x60, 0xc6, 0xd2, 0xeb, 0x5e, 0x6a, 0x4c,
 					0x44, 0xd3, 0x3f, 0x45, 0x3e}
-				return btcutil.NewAddressPubKey(serializedPubKey, &btcnet.TestNet3Params)
+				return rddutil.NewAddressPubKey(serializedPubKey, &rddnet.TestNet3Params)
 			},
-			net: &btcnet.TestNet3Params,
+			net: &rddnet.TestNet3Params,
 		},
 		{
 			name: "testnet p2pk hybrid (0x07)",
@@ -442,7 +442,7 @@ func TestAddresses(t *testing.T) {
 				"537a576782eba668a7ef8bd3b3cfb1edb7117ab65129b8a2e681f3c1e0908ef7b",
 			encoded: "muUnepk5nPPrxUTuTAhRqrpAQuSWS5fVii",
 			valid:   true,
-			result: btcutil.TstAddressPubKey(
+			result: rddutil.TstAddressPubKey(
 				[]byte{
 					0x07, 0xb0, 0xbd, 0x63, 0x42, 0x34, 0xab, 0xbb, 0x1b, 0xa1,
 					0xe9, 0x86, 0xe8, 0x84, 0x18, 0x5c, 0x61, 0xcf, 0x43, 0xe0,
@@ -451,8 +451,8 @@ func TestAddresses(t *testing.T) {
 					0x8a, 0x7e, 0xf8, 0xbd, 0x3b, 0x3c, 0xfb, 0x1e, 0xdb, 0x71,
 					0x17, 0xab, 0x65, 0x12, 0x9b, 0x8a, 0x2e, 0x68, 0x1f, 0x3c,
 					0x1e, 0x09, 0x08, 0xef, 0x7b},
-				btcutil.PKFHybrid, btcnet.TestNet3Params.PubKeyHashAddrID),
-			f: func() (btcutil.Address, error) {
+				rddutil.PKFHybrid, rddnet.TestNet3Params.PubKeyHashAddrID),
+			f: func() (rddutil.Address, error) {
 				serializedPubKey := []byte{
 					0x07, 0xb0, 0xbd, 0x63, 0x42, 0x34, 0xab, 0xbb, 0x1b, 0xa1,
 					0xe9, 0x86, 0xe8, 0x84, 0x18, 0x5c, 0x61, 0xcf, 0x43, 0xe0,
@@ -461,15 +461,15 @@ func TestAddresses(t *testing.T) {
 					0x8a, 0x7e, 0xf8, 0xbd, 0x3b, 0x3c, 0xfb, 0x1e, 0xdb, 0x71,
 					0x17, 0xab, 0x65, 0x12, 0x9b, 0x8a, 0x2e, 0x68, 0x1f, 0x3c,
 					0x1e, 0x09, 0x08, 0xef, 0x7b}
-				return btcutil.NewAddressPubKey(serializedPubKey, &btcnet.TestNet3Params)
+				return rddutil.NewAddressPubKey(serializedPubKey, &rddnet.TestNet3Params)
 			},
-			net: &btcnet.TestNet3Params,
+			net: &rddnet.TestNet3Params,
 		},
 	}
 
 	for _, test := range tests {
 		// Decode addr and compare error against valid.
-		decoded, err := btcutil.DecodeAddress(test.addr, test.net)
+		decoded, err := rddutil.DecodeAddress(test.addr, test.net)
 		if (err == nil) != test.valid {
 			t.Errorf("%v: decoding test failed: %v", test.name, err)
 			return
@@ -497,13 +497,13 @@ func TestAddresses(t *testing.T) {
 			// Perform type-specific calculations.
 			var saddr []byte
 			switch d := decoded.(type) {
-			case *btcutil.AddressPubKeyHash:
-				saddr = btcutil.TstAddressSAddr(encoded)
+			case *rddutil.AddressPubKeyHash:
+				saddr = rddutil.TstAddressSAddr(encoded)
 
-			case *btcutil.AddressScriptHash:
-				saddr = btcutil.TstAddressSAddr(encoded)
+			case *rddutil.AddressScriptHash:
+				saddr = rddutil.TstAddressSAddr(encoded)
 
-			case *btcutil.AddressPubKey:
+			case *rddutil.AddressPubKey:
 				// Ignore the error here since the script
 				// address is checked below.
 				saddr, _ = hex.DecodeString(d.String())
@@ -517,14 +517,14 @@ func TestAddresses(t *testing.T) {
 				return
 			}
 			switch a := decoded.(type) {
-			case *btcutil.AddressPubKeyHash:
+			case *rddutil.AddressPubKeyHash:
 				if h := a.Hash160()[:]; !bytes.Equal(saddr, h) {
 					t.Errorf("%v: hashes do not match:\n%x != \n%x",
 						test.name, saddr, h)
 					return
 				}
 
-			case *btcutil.AddressScriptHash:
+			case *rddutil.AddressScriptHash:
 				if h := a.Hash160()[:]; !bytes.Equal(saddr, h) {
 					t.Errorf("%v: hashes do not match:\n%x != \n%x",
 						test.name, saddr, h)
