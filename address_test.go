@@ -19,7 +19,7 @@ import (
 )
 
 // invalidNet is an invalid bitcoin network.
-const invalidNet = rddwire.BitcoinNet(0xffffffff)
+const invalidNet = rddwire.ReddcoinNet(0xffffffff)
 
 func TestAddresses(t *testing.T) {
 	tests := []struct {

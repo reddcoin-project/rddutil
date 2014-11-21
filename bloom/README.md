@@ -13,27 +13,27 @@ report.  Package coinset is licensed under the liberal ISC license.
 
 ## Documentation
 
-[![GoDoc](https://godoc.org/github.com/conformal/btcutil/bloom?status.png)]
-(http://godoc.org/github.com/conformal/btcutil/bloom)
+[![GoDoc](https://godoc.org/github.com/reddcoin-project/rddutil/bloom?status.png)]
+(http://godoc.org/github.com/reddcoin-project/rddutil/bloom)
 
 Full `go doc` style documentation for the project can be viewed online without
 installing this package by using the GoDoc site here:
-http://godoc.org/github.com/conformal/btcutil/bloom
+http://godoc.org/github.com/reddcoin-project/rddutil/bloom
 
 You can also view the documentation locally once the package is installed with
 the `godoc` tool by running `godoc -http=":6060"` and pointing your browser to
-http://localhost:6060/pkg/github.com/conformal/btcutil/bloom
+http://localhost:6060/pkg/github.com/reddcoin-project/rddutil/bloom
 
 ## Installation
 
 ```bash
-$ go get github.com/conformal/btcutil/bloom
+$ go get github.com/reddcoin-project/rddutil/bloom
 ```
 
 ## Examples
 
 * [NewFilter Example]
-  (http://godoc.org/github.com/conformal/btcutil/bloom#example-NewFilter)  
+  (http://godoc.org/github.com/reddcoin-project/rddutil/bloom#example-NewFilter)  
   Demonstrates how to create a new bloom filter, add a transaction hash to it,
   and check if the filter matches the transaction.
 

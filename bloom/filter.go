@@ -9,9 +9,9 @@ import (
 	"math"
 	"sync"
 
-	"github.com/conformal/btcscript"
-	"github.com/conformal/btcutil"
-	"github.com/conformal/btcwire"
+	"github.com/reddcoin-project/rddscript"
+	"github.com/reddcoin-project/rddutil"
+	"github.com/reddcoin-project/rddwire"
 )
 
 // ln2Squared is simply the square of the natural log of 2.
@@ -26,11 +26,11 @@ func minUint32(a, b uint32) uint32 {
 	return b
 }
 
-// Filter defines a bitcoin bloom filter that provides easy manipulation of raw
+// Filter defines a Reddcoin bloom filter that provides easy manipulation of raw
 // filter data.
 type Filter struct {
 	mtx           sync.Mutex
-	msgFilterLoad *btcwire.MsgFilterLoad
+	msgFilterLoad *rddwire.MsgFilterLoad
 }
 
 // NewFilter creates a new bloom filter instance, mainly to be used by SPV
@@ -42,7 +42,7 @@ type Filter struct {
 //
 // For more information on what values to use for both elements and fprate,
 // see https://en.wikipedia.org/wiki/Bloom_filter.
-func NewFilter(elements, tweak uint32, fprate float64, flags btcwire.BloomUpdateType) *Filter {
+func NewFilter(elements, tweak uint32, fprate float64, flags rddwire.BloomUpdateType) *Filter {
 	// Massage the false positive rate to sane values.
 	if fprate > 1.0 {
 		fprate = 1.0
@@ -57,7 +57,7 @@ func NewFilter(elements, tweak uint32, fprate float64, flags btcwire.BloomUpdate
 	// Equivalent to m = -(n*ln(p) / ln(2)^2), where m is in bits.
 	// Then clamp it to the maximum filter size and convert to bytes.
 	dataLen := uint32(-1 * float64(elements) * math.Log(fprate) / ln2Squared)
-	dataLen = minUint32(dataLen, btcwire.MaxFilterLoadFilterSize*8) / 8
+	dataLen = minUint32(dataLen, rddwire.MaxFilterLoadFilterSize*8) / 8
 
 	// Calculate the number of hash functions based on the size of the
 	// filter calculated above and the number of elements.
@@ -65,10 +65,10 @@ func NewFilter(elements, tweak uint32, fprate float64, flags btcwire.BloomUpdate
 	// Equivalent to k = (m/n) * ln(2)
 	// Then clamp it to the maximum allowed hash funcs.
 	hashFuncs := uint32(float64(dataLen*8) / float64(elements) * math.Ln2)
-	hashFuncs = minUint32(hashFuncs, btcwire.MaxFilterLoadHashFuncs)
+	hashFuncs = minUint32(hashFuncs, rddwire.MaxFilterLoadHashFuncs)
 
 	data := make([]byte, dataLen)
-	msg := btcwire.NewMsgFilterLoad(data, hashFuncs, tweak, flags)
+	msg := rddwire.NewMsgFilterLoad(data, hashFuncs, tweak, flags)
 
 	return &Filter{
 		msgFilterLoad: msg,
@@ -76,8 +76,8 @@ func NewFilter(elements, tweak uint32, fprate float64, flags btcwire.BloomUpdate
 }
 
 // LoadFilter creates a new Filter instance with the given underlying
-// btcwire.MsgFilterLoad.
-func LoadFilter(filter *btcwire.MsgFilterLoad) *Filter {
+// rddwire.MsgFilterLoad.
+func LoadFilter(filter *rddwire.MsgFilterLoad) *Filter {
 	return &Filter{
 		msgFilterLoad: filter,
 	}
@@ -96,7 +96,7 @@ func (bf *Filter) IsLoaded() bool {
 // Reload loads a new filter replacing any existing filter.
 //
 // This function is safe for concurrent access.
-func (bf *Filter) Reload(filter *btcwire.MsgFilterLoad) {
+func (bf *Filter) Reload(filter *rddwire.MsgFilterLoad) {
 	bf.mtx.Lock()
 	bf.msgFilterLoad = filter
 	bf.mtx.Unlock()
@@ -114,7 +114,7 @@ func (bf *Filter) Unload() {
 // hash returns the bit offset in the bloom filter which corresponds to the
 // passed data for the given indepedent hash function number.
 func (bf *Filter) hash(hashNum uint32, data []byte) uint32 {
-	// bitcoind: 0xfba4c795 chosen as it guarantees a reasonable bit
+	// reddcoind: 0xfba4c795 chosen as it guarantees a reasonable bit
 	// difference between hashNum values.
 	//
 	// Note that << 3 is equivalent to multiplying by 8, but is faster.
@@ -164,11 +164,11 @@ func (bf *Filter) Matches(data []byte) bool {
 // outpoint and false if it definitely does not.
 //
 // This function MUST be called with the filter lock held.
-func (bf *Filter) matchesOutPoint(outpoint *btcwire.OutPoint) bool {
+func (bf *Filter) matchesOutPoint(outpoint *rddwire.OutPoint) bool {
 	// Serialize
-	var buf [btcwire.HashSize + 4]byte
+	var buf [rddwire.HashSize + 4]byte
 	copy(buf[:], outpoint.Hash.Bytes())
-	binary.LittleEndian.PutUint32(buf[btcwire.HashSize:], outpoint.Index)
+	binary.LittleEndian.PutUint32(buf[rddwire.HashSize:], outpoint.Index)
 
 	return bf.matches(buf[:])
 }
@@ -177,7 +177,7 @@ func (bf *Filter) matchesOutPoint(outpoint *btcwire.OutPoint) bool {
 // outpoint and false if it definitely does not.
 //
 // This function is safe for concurrent access.
-func (bf *Filter) MatchesOutPoint(outpoint *btcwire.OutPoint) bool {
+func (bf *Filter) MatchesOutPoint(outpoint *rddwire.OutPoint) bool {
 	bf.mtx.Lock()
 	match := bf.matchesOutPoint(outpoint)
 	bf.mtx.Unlock()
@@ -214,10 +214,10 @@ func (bf *Filter) Add(data []byte) {
 	bf.mtx.Unlock()
 }
 
-// AddShaHash adds the passed btcwire.ShaHash to the Filter.
+// AddShaHash adds the passed rddwire.ShaHash to the Filter.
 //
 // This function is safe for concurrent access.
-func (bf *Filter) AddShaHash(sha *btcwire.ShaHash) {
+func (bf *Filter) AddShaHash(sha *rddwire.ShaHash) {
 	bf.mtx.Lock()
 	bf.add(sha.Bytes())
 	bf.mtx.Unlock()
@@ -226,11 +226,11 @@ func (bf *Filter) AddShaHash(sha *btcwire.ShaHash) {
 // addOutPoint adds the passed transaction outpoint to the bloom filter.
 //
 // This function MUST be called with the filter lock held.
-func (bf *Filter) addOutPoint(outpoint *btcwire.OutPoint) {
+func (bf *Filter) addOutPoint(outpoint *rddwire.OutPoint) {
 	// Serialize
-	var buf [btcwire.HashSize + 4]byte
+	var buf [rddwire.HashSize + 4]byte
 	copy(buf[:], outpoint.Hash.Bytes())
-	binary.LittleEndian.PutUint32(buf[btcwire.HashSize:], outpoint.Index)
+	binary.LittleEndian.PutUint32(buf[rddwire.HashSize:], outpoint.Index)
 
 	bf.add(buf[:])
 }
@@ -238,7 +238,7 @@ func (bf *Filter) addOutPoint(outpoint *btcwire.OutPoint) {
 // AddOutPoint adds the passed transaction outpoint to the bloom filter.
 //
 // This function is safe for concurrent access.
-func (bf *Filter) AddOutPoint(outpoint *btcwire.OutPoint) {
+func (bf *Filter) AddOutPoint(outpoint *rddwire.OutPoint) {
 	bf.mtx.Lock()
 	bf.addOutPoint(outpoint)
 	bf.mtx.Unlock()
@@ -249,15 +249,15 @@ func (bf *Filter) AddOutPoint(outpoint *btcwire.OutPoint) {
 // script.
 //
 // This function MUST be called with the filter lock held.
-func (bf *Filter) maybeAddOutpoint(pkScript []byte, outHash *btcwire.ShaHash, outIdx uint32) {
+func (bf *Filter) maybeAddOutpoint(pkScript []byte, outHash *rddwire.ShaHash, outIdx uint32) {
 	switch bf.msgFilterLoad.Flags {
-	case btcwire.BloomUpdateAll:
-		outpoint := btcwire.NewOutPoint(outHash, outIdx)
+	case rddwire.BloomUpdateAll:
+		outpoint := rddwire.NewOutPoint(outHash, outIdx)
 		bf.addOutPoint(outpoint)
-	case btcwire.BloomUpdateP2PubkeyOnly:
-		class := btcscript.GetScriptClass(pkScript)
-		if class == btcscript.PubKeyTy || class == btcscript.MultiSigTy {
-			outpoint := btcwire.NewOutPoint(outHash, outIdx)
+	case rddwire.BloomUpdateP2PubkeyOnly:
+		class := rddscript.GetScriptClass(pkScript)
+		if class == rddscript.PubKeyTy || class == rddscript.MultiSigTy {
+			outpoint := rddwire.NewOutPoint(outHash, outIdx)
 			bf.addOutPoint(outpoint)
 		}
 	}
@@ -269,7 +269,7 @@ func (bf *Filter) maybeAddOutpoint(pkScript []byte, outHash *btcwire.ShaHash, ou
 // update flags set via the loaded filter if needed.
 //
 // This function MUST be called with the filter lock held.
-func (bf *Filter) matchTxAndUpdate(tx *btcutil.Tx) bool {
+func (bf *Filter) matchTxAndUpdate(tx *rddutil.Tx) bool {
 	// Check if the filter matches the hash of the transaction.
 	// This is useful for finding transactions when they appear in a block.
 	matched := bf.matches(tx.Sha().Bytes())
@@ -283,7 +283,7 @@ func (bf *Filter) matchTxAndUpdate(tx *btcutil.Tx) bool {
 	// from the client and avoids some potential races that could otherwise
 	// occur.
 	for i, txOut := range tx.MsgTx().TxOut {
-		pushedData, err := btcscript.PushedData(txOut.PkScript)
+		pushedData, err := rddscript.PushedData(txOut.PkScript)
 		if err != nil {
 			continue
 		}
@@ -314,7 +314,7 @@ func (bf *Filter) matchTxAndUpdate(tx *btcutil.Tx) bool {
 			return true
 		}
 
-		pushedData, err := btcscript.PushedData(txin.SignatureScript)
+		pushedData, err := rddscript.PushedData(txin.SignatureScript)
 		if err != nil {
 			continue
 		}
@@ -334,18 +334,18 @@ func (bf *Filter) matchTxAndUpdate(tx *btcutil.Tx) bool {
 // update flags set via the loaded filter if needed.
 //
 // This function is safe for concurrent access.
-func (bf *Filter) MatchTxAndUpdate(tx *btcutil.Tx) bool {
+func (bf *Filter) MatchTxAndUpdate(tx *rddutil.Tx) bool {
 	bf.mtx.Lock()
 	match := bf.matchTxAndUpdate(tx)
 	bf.mtx.Unlock()
 	return match
 }
 
-// MsgFilterLoad returns the underlying btcwire.MsgFilterLoad for the bloom
+// MsgFilterLoad returns the underlying rddwire.MsgFilterLoad for the bloom
 // filter.
 //
 // This function is safe for concurrent access.
-func (bf *Filter) MsgFilterLoad() *btcwire.MsgFilterLoad {
+func (bf *Filter) MsgFilterLoad() *rddwire.MsgFilterLoad {
 	bf.mtx.Lock()
 	msg := bf.msgFilterLoad
 	bf.mtx.Unlock()

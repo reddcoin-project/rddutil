@@ -14,21 +14,21 @@ report.  Package coinset is licensed under the liberal ISC license.
 
 ## Documentation
 
-[![GoDoc](https://godoc.org/github.com/conformal/btcutil/coinset?status.png)]
-(http://godoc.org/github.com/conformal/btcutil/coinset)
+[![GoDoc](https://godoc.org/github.com/reddcoin-project/rddutil/coinset?status.png)]
+(http://godoc.org/github.com/reddcoin-project/rddutil/coinset)
 
 Full `go doc` style documentation for the project can be viewed online without
 installing this package by using the GoDoc site here:
-http://godoc.org/github.com/conformal/btcutil/coinset
+http://godoc.org/github.com/reddcoin-project/rddutil/coinset
 
 You can also view the documentation locally once the package is installed with
 the `godoc` tool by running `godoc -http=":6060"` and pointing your browser to
-http://localhost:6060/pkg/github.com/conformal/btcutil/coinset
+http://localhost:6060/pkg/github.com/reddcoin-project/rddutil/coinset
 
 ## Installation
 
 ```bash
-$ go get github.com/conformal/btcutil/coinset
+$ go get github.com/reddcoin-project/rddutil/coinset
 ```
 
 ## Usage

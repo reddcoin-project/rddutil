@@ -7,8 +7,8 @@ package hdkeychain_test
 import (
 	"fmt"
 
-	"github.com/conformal/btcnet"
-	"github.com/conformal/btcutil/hdkeychain"
+	"github.com/reddcoin-project/rddnet"
+	"github.com/reddcoin-project/rddutil/hdkeychain"
 )
 
 // This example demonstrates how to generate a cryptographically random seed
@@ -117,13 +117,13 @@ func Example_defaultWalletLayout() {
 	}
 
 	// Get and show the address associated with the extended keys for the
-	// main bitcoin	network.
-	acct0ExtAddr, err := acct0Ext10.Address(&btcnet.MainNetParams)
+	// main Reddcoin	network.
+	acct0ExtAddr, err := acct0Ext10.Address(&rddnet.MainNetParams)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	acct0IntAddr, err := acct0Int0.Address(&btcnet.MainNetParams)
+	acct0IntAddr, err := acct0Int0.Address(&rddnet.MainNetParams)
 	if err != nil {
 		fmt.Println(err)
 		return

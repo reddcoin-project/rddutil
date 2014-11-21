@@ -9,9 +9,9 @@ import (
 	"encoding/hex"
 	"testing"
 
-	"github.com/conformal/btcutil"
-	"github.com/conformal/btcutil/bloom"
-	"github.com/conformal/btcwire"
+	"github.com/reddcoin-project/rddutil"
+	"github.com/reddcoin-project/rddutil/bloom"
+	"github.com/reddcoin-project/rddwire"
 )
 
 func TestMerkleBlock3(t *testing.T) {
@@ -28,16 +28,16 @@ func TestMerkleBlock3(t *testing.T) {
 		t.Errorf("TestMerkleBlock3 DecodeString failed: %v", err)
 		return
 	}
-	blk, err := btcutil.NewBlockFromBytes(blockBytes)
+	blk, err := rddutil.NewBlockFromBytes(blockBytes)
 	if err != nil {
 		t.Errorf("TestMerkleBlock3 NewBlockFromBytes failed: %v", err)
 		return
 	}
 
-	f := bloom.NewFilter(10, 0, 0.000001, btcwire.BloomUpdateAll)
+	f := bloom.NewFilter(10, 0, 0.000001, rddwire.BloomUpdateAll)
 
 	inputStr := "63194f18be0af63f2c6bc9dc0f777cbefed3d9415c4af83f3ee3a3d669c00cb5"
-	sha, err := btcwire.NewShaHashFromStr(inputStr)
+	sha, err := rddwire.NewShaHashFromStr(inputStr)
 	if err != nil {
 		t.Errorf("TestMerkleBlock3 NewShaHashFromStr failed: %v", err)
 		return
@@ -59,7 +59,7 @@ func TestMerkleBlock3(t *testing.T) {
 	}
 
 	got := bytes.NewBuffer(nil)
-	err = mBlock.BtcEncode(got, btcwire.ProtocolVersion)
+	err = mBlock.BtcEncode(got, rddwire.ProtocolVersion)
 	if err != nil {
 		t.Errorf("TestMerkleBlock3 BtcEncode failed: %v", err)
 		return

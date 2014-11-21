@@ -65,7 +65,7 @@ func TstAddressPubKey(serializedPubKey []byte, pubKeyFormat PubKeyFormat,
 }
 
 // TstAddressSAddr returns the expected script address bytes for
-// P2PKH and P2SH bitcoin addresses.
+// P2PKH and P2SH Reddcoin addresses.
 func TstAddressSAddr(addr string) []byte {
 	decoded := Base58Decode(addr)
 	return decoded[1 : 1+ripemd160.Size]

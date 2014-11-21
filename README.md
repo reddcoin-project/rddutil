@@ -1,4 +1,4 @@
-btcutil
+rddutil
 =======
 
 [![Build Status](https://travis-ci.org/reddcoin-project/rddutil.png?branch=master)]
@@ -6,35 +6,35 @@ btcutil
 (https://coveralls.io/repos/reddcoin-project/rddutil/badge.png?branch=master)]
 (https://coveralls.io/r/reddcoin-project/rddutil?branch=master)
 
-Package btcutil provides bitcoin-specific convenience functions and types.
+Package rddutil provides Reddcoin-specific convenience functions and types.
 A comprehensive suite of tests is provided to ensure proper functionality.  See
 `test_coverage.txt` for the gocov coverage report.  Alternatively, if you are
 running a POSIX OS, you can run the `cov_report.sh` script for a real-time
-report.  Package btcutil is licensed under the liberal ISC license.
+report.  Package rddutil is licensed under the liberal ISC license.
 
-This package was developed for btcd, an alternative full-node implementation of
-bitcoin which is under active development by Conformal.  Although it was
-primarily written for btcd, this package has intentionally been designed so it
+This package was developed for rddd, an alternative full-node implementation of
+Reddcoin which is under active development by Conformal. Although it was
+primarily written for rddd, this package has intentionally been designed so it
 can be used as a standalone package for any projects needing the functionality
 provided.
 
 ## Documentation
 
-[![GoDoc](https://godoc.org/github.com/conformal/btcutil?status.png)]
-(http://godoc.org/github.com/conformal/btcutil)
+[![GoDoc](https://godoc.org/github.com/reddcoin-project/rddutil?status.png)]
+(http://godoc.org/github.com/reddcoin-project/rddutil)
 
 Full `go doc` style documentation for the project can be viewed online without
 installing this package by using the GoDoc site here:
-http://godoc.org/github.com/conformal/btcutil
+http://godoc.org/github.com/reddcoin-project/rddutil
 
 You can also view the documentation locally once the package is installed with
 the `godoc` tool by running `godoc -http=":6060"` and pointing your browser to
-http://localhost:6060/pkg/github.com/conformal/btcutil
+http://localhost:6060/pkg/github.com/reddcoin-project/rddutil
 
 ## Installation
 
 ```bash
-$ go get github.com/conformal/btcutil
+$ go get github.com/reddcoin-project/rddutil
 ```
 
 ## GPG Verification Key
@@ -59,5 +59,5 @@ signature perform the following:
 
 ## License
 
-Package btcutil is licensed under the [copyfree](http://copyfree.org) ISC
+Package rddutil is licensed under the [copyfree](http://copyfree.org) ISC
 License.

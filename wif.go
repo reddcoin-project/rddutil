@@ -39,7 +39,7 @@ type WIF struct {
 	// uncompressed (65-byte) one.
 	CompressPubKey bool
 
-	// netID is the bitcoin network identifier byte used when
+	// netID is the Reddcoin network identifier byte used when
 	// WIF encoding the private key.
 	netID byte
 }
@@ -56,7 +56,7 @@ func NewWIF(privKey *btcec.PrivateKey, net *rddnet.Params, compress bool) (*WIF,
 }
 
 // IsForNet returns whether or not the decoded WIF structure is associated
-// with the passed bitcoin network.
+// with the passed Reddcoin network.
 func (w *WIF) IsForNet(net *rddnet.Params) bool {
 	return w.netID == net.PrivateKeyID
 }

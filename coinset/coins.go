@@ -377,7 +377,7 @@ func (c *SimpleCoin) Value() rddutil.Amount {
 //
 // This can be used to determine what type of script the Coin uses
 // and extract standard addresses if possible using
-// btcscript.ExtractPkScriptAddrs for example.
+// rddscript.ExtractPkScriptAddrs for example.
 func (c *SimpleCoin) PkScript() []byte {
 	return c.txOut().PkScript
 }

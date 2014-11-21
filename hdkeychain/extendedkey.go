@@ -19,9 +19,9 @@ import (
 	"math/big"
 
 	"github.com/conformal/btcec"
-	"github.com/conformal/btcnet"
-	"github.com/conformal/btcutil"
-	"github.com/conformal/btcwire"
+	"github.com/reddcoin-project/rddnet"
+	"github.com/reddcoin-project/rddutil"
+	"github.com/reddcoin-project/rddwire"
 )
 
 const (
@@ -91,7 +91,7 @@ var (
 
 // masterKey is the master key used along with a random seed used to generate
 // the master node in the hierarchical tree.
-var masterKey = []byte("Bitcoin seed")
+var masterKey = []byte("Reddcoin seed")
 
 // ExtendedKey houses all the information needed to support a hierarchical
 // deterministic extended key.  See the package overview documentation for
@@ -300,7 +300,7 @@ func (k *ExtendedKey) Child(i uint32) (*ExtendedKey, error) {
 
 	// The fingerprint of the parent for the derived child is the first 4
 	// bytes of the RIPEMD160(SHA256(parentPubKey)).
-	parentFP := btcutil.Hash160(k.pubKeyBytes())[:4]
+	parentFP := rddutil.Hash160(k.pubKeyBytes())[:4]
 	return newExtendedKey(k.version, childKey, childChainCode, parentFP,
 		k.depth+1, i, isPrivate), nil
 }
@@ -320,7 +320,7 @@ func (k *ExtendedKey) Neuter() (*ExtendedKey, error) {
 	}
 
 	// Get the associated public extended key version bytes.
-	version, err := btcnet.HDPrivateKeyToPublicKeyID(k.version)
+	version, err := rddnet.HDPrivateKeyToPublicKeyID(k.version)
 	if err != nil {
 		return nil, err
 	}
@@ -351,11 +351,11 @@ func (k *ExtendedKey) ECPrivKey() (*btcec.PrivateKey, error) {
 	return privKey, nil
 }
 
-// Address converts the extended key to a standard bitcoin pay-to-pubkey-hash
+// Address converts the extended key to a standard Reddcoin pay-to-pubkey-hash
 // address for the passed network.
-func (k *ExtendedKey) Address(net *btcnet.Params) (*btcutil.AddressPubKeyHash, error) {
-	pkHash := btcutil.Hash160(k.pubKeyBytes())
-	return btcutil.NewAddressPubKeyHash(pkHash, net)
+func (k *ExtendedKey) Address(net *rddnet.Params) (*rddutil.AddressPubKeyHash, error) {
+	pkHash := rddutil.Hash160(k.pubKeyBytes())
+	return rddutil.NewAddressPubKeyHash(pkHash, net)
 }
 
 // String returns the extended key as a human-readable base58-encoded string.
@@ -384,21 +384,21 @@ func (k *ExtendedKey) String() string {
 		serializedBytes = append(serializedBytes, k.pubKeyBytes()...)
 	}
 
-	checkSum := btcwire.DoubleSha256(serializedBytes)[:4]
+	checkSum := rddwire.DoubleSha256(serializedBytes)[:4]
 	serializedBytes = append(serializedBytes, checkSum...)
-	return btcutil.Base58Encode(serializedBytes)
+	return rddutil.Base58Encode(serializedBytes)
 }
 
 // IsForNet returns whether or not the extended key is associated with the
-// passed bitcoin network.
-func (k *ExtendedKey) IsForNet(net *btcnet.Params) bool {
+// passed Reddcoin network.
+func (k *ExtendedKey) IsForNet(net *rddnet.Params) bool {
 	return bytes.Equal(k.version, net.HDPrivateKeyID[:]) ||
 		bytes.Equal(k.version, net.HDPublicKeyID[:])
 }
 
 // SetNet associates the extended key, and any child keys yet to be derived from
 // it, with the passed network.
-func (k *ExtendedKey) SetNet(net *btcnet.Params) {
+func (k *ExtendedKey) SetNet(net *rddnet.Params) {
 	if k.isPrivate {
 		k.version = net.HDPrivateKeyID[:]
 	} else {
@@ -446,7 +446,7 @@ func NewMaster(seed []byte) (*ExtendedKey, error) {
 	}
 
 	// First take the HMAC-SHA512 of the master key and the seed data:
-	//   I = HMAC-SHA512(Key = "Bitcoin seed", Data = S)
+	//   I = HMAC-SHA512(Key = "Reddcoin seed", Data = S)
 	hmac512 := hmac.New(sha512.New, masterKey)
 	hmac512.Write(seed)
 	lr := hmac512.Sum(nil)
@@ -464,7 +464,7 @@ func NewMaster(seed []byte) (*ExtendedKey, error) {
 	}
 
 	parentFP := []byte{0x00, 0x00, 0x00, 0x00}
-	return newExtendedKey(btcnet.MainNetParams.HDPrivateKeyID[:], secretKey,
+	return newExtendedKey(rddnet.MainNetParams.HDPrivateKeyID[:], secretKey,
 		chainCode, parentFP, 0, 0, true), nil
 }
 
@@ -473,7 +473,7 @@ func NewMaster(seed []byte) (*ExtendedKey, error) {
 func NewKeyFromString(key string) (*ExtendedKey, error) {
 	// The base58-decoded extended key must consist of a serialized payload
 	// plus an additional 4 bytes for the checksum.
-	decoded := btcutil.Base58Decode(key)
+	decoded := rddutil.Base58Decode(key)
 	if len(decoded) != serializedKeyLen+4 {
 		return nil, ErrInvalidKeyLen
 	}
@@ -485,7 +485,7 @@ func NewKeyFromString(key string) (*ExtendedKey, error) {
 	// Split the payload and checksum up and ensure the checksum matches.
 	payload := decoded[:len(decoded)-4]
 	checkSum := decoded[len(decoded)-4:]
-	expectedCheckSum := btcwire.DoubleSha256(payload)[:4]
+	expectedCheckSum := rddwire.DoubleSha256(payload)[:4]
 	if !bytes.Equal(checkSum, expectedCheckSum) {
 		return nil, ErrBadChecksum
 	}

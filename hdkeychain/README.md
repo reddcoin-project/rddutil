@@ -4,7 +4,7 @@ hdkeychain
 [![Build Status](https://travis-ci.org/conformal/btcutil.png?branch=master)]
 (https://travis-ci.org/conformal/btcutil)
 
-Package hdkeychain provides an API for bitcoin hierarchical deterministic
+Package hdkeychain provides an API for Reddcoin hierarchical deterministic
 extended keys (BIP0032).
 
 A comprehensive suite of tests is provided to ensure proper functionality.  See
@@ -21,9 +21,9 @@ report.  Package hdkeychain is licensed under the liberal ISC license.
 - Support for multi-layer derivation
 - Easy serialization and deserialization for both private and public extended
   keys
-- Support for custom networks by registering them with btcnet
-- Obtaining the underlying EC pubkeys, EC privkeys, and associated bitcoin
-  addresses ties in seamlessly with existing btcec and btcutil types which
+- Support for custom networks by registering them with rddnet
+- Obtaining the underlying EC pubkeys, EC privkeys, and associated Reddcoin
+  addresses ties in seamlessly with existing btcec and rddutil types which
   provide powerful tools for working with them to do things like sign
   transations and generate payment scripts
 - Uses the btcec package which is highly optimized for secp256k1
@@ -37,35 +37,35 @@ report.  Package hdkeychain is licensed under the liberal ISC license.
 
 ## Documentation
 
-[![GoDoc](https://godoc.org/github.com/conformal/btcutil/hdkeychain?status.png)]
-(http://godoc.org/github.com/conformal/btcutil/hdkeychain)
+[![GoDoc](https://godoc.org/github.com/reddcoin-project/rddutil/hdkeychain?status.png)]
+(http://godoc.org/github.com/reddcoin-project/rddutil/hdkeychain)
 
 Full `go doc` style documentation for the project can be viewed online without
 installing this package by using the GoDoc site here:
-http://godoc.org/github.com/conformal/btcutil/hdkeychain
+http://godoc.org/github.com/reddcoin-project/rddutil/hdkeychain
 
 You can also view the documentation locally once the package is installed with
 the `godoc` tool by running `godoc -http=":6060"` and pointing your browser to
-http://localhost:6060/pkg/github.com/conformal/btcutil/hdkeychain
+http://localhost:6060/pkg/github.com/reddcoin-project/rddutil/hdkeychain
 
 ## Installation
 
 ```bash
-$ go get github.com/conformal/btcutil/hdkeychain
+$ go get github.com/reddcoin-project/rddutil/hdkeychain
 ```
 
 ## Examples
 
 * [NewMaster Example]
-  (http://godoc.org/github.com/conformal/btcutil/hdkeychain#example-NewMaster)  
+  (http://godoc.org/github.com/reddcoin-project/rddutil/hdkeychain#example-NewMaster)  
   Demonstrates how to generate a cryptographically random seed then use it to
   create a new master node (extended key).
 * [Default Wallet Layout Example]
-  (http://godoc.org/github.com/conformal/btcutil/hdkeychain#example-package--DefaultWalletLayout)  
+  (http://godoc.org/github.com/reddcoin-project/rddutil/hdkeychain#example-package--DefaultWalletLayout)  
   Demonstrates the default hierarchical deterministic wallet layout as described
   in BIP0032.
 * [Audits Use Case Example]
-  (http://godoc.org/github.com/conformal/btcutil/hdkeychain#example-package--Audits)  
+  (http://godoc.org/github.com/reddcoin-project/rddutil/hdkeychain#example-package--Audits)  
   Demonstrates the audits use case in BIP0032.
 
 ## License
