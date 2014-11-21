@@ -27,25 +27,25 @@ func TestAmountCreation(t *testing.T) {
 		},
 		{
 			name:     "max producable",
-			amount:   21e6,
+			amount:   46e9,
 			valid:    true,
 			expected: MaxSatoshi,
 		},
 		{
 			name:     "min producable",
-			amount:   -21e6,
+			amount:   -46e9,
 			valid:    true,
 			expected: -MaxSatoshi,
 		},
 		{
 			name:     "exceeds max producable",
-			amount:   21e6 + 1e-8,
+			amount:   46e9 + 1e-8,
 			valid:    true,
 			expected: MaxSatoshi + 1,
 		},
 		{
 			name:     "exceeds min producable",
-			amount:   -21e6 - 1e-8,
+			amount:   -46e9 - 1e-8,
 			valid:    true,
 			expected: -MaxSatoshi - 1,
 		},
@@ -119,40 +119,25 @@ func TestAmountUnitConversions(t *testing.T) {
 		s         string
 	}{
 		{
-			name:      "MBTC",
+			name:      "MRDD",
 			amount:    MaxSatoshi,
-			unit:      AmountMegaBTC,
-			converted: 21,
-			s:         "21 MBTC",
+			unit:      AmountMegaRDD,
+			converted: 46000,
+			s:         "46000 MRDD",
 		},
 		{
-			name:      "kBTC",
+			name:      "kRDD",
 			amount:    44433322211100,
-			unit:      AmountKiloBTC,
+			unit:      AmountKiloRDD,
 			converted: 444.33322211100,
-			s:         "444.333222111 kBTC",
+			s:         "444.333222111 kRDD",
 		},
 		{
-			name:      "BTC",
+			name:      "RDD",
 			amount:    44433322211100,
-			unit:      AmountBTC,
+			unit:      AmountRDD,
 			converted: 444333.22211100,
-			s:         "444333.222111 BTC",
-		},
-		{
-			name:      "mBTC",
-			amount:    44433322211100,
-			unit:      AmountMilliBTC,
-			converted: 444333222.11100,
-			s:         "444333222.111 mBTC",
-		},
-		{
-
-			name:      "μBTC",
-			amount:    44433322211100,
-			unit:      AmountMicroBTC,
-			converted: 444333222111.00,
-			s:         "444333222111 μBTC",
+			s:         "444333.222111 RDD",
 		},
 		{
 
@@ -168,7 +153,7 @@ func TestAmountUnitConversions(t *testing.T) {
 			amount:    44433322211100,
 			unit:      AmountUnit(-1),
 			converted: 4443332.2211100,
-			s:         "4443332.22111 1e-1 BTC",
+			s:         "4443332.22111 1e-1 RDD",
 		},
 	}
 
@@ -186,7 +171,7 @@ func TestAmountUnitConversions(t *testing.T) {
 		}
 
 		// Verify that Amount.String works as advertised.
-		s1 := test.amount.Format(AmountBTC)
+		s1 := test.amount.Format(AmountRDD)
 		s2 := test.amount.String()
 		if s1 != s2 {
 			t.Errorf("%v: String does not match Format(AmountBitcoin): %v != %v", test.name, s1, s2)
@@ -202,52 +187,52 @@ func TestAmountMulF64(t *testing.T) {
 		res  Amount
 	}{
 		{
-			name: "Multiply 0.1 BTC by 2",
-			amt:  100e5, // 0.1 BTC
+			name: "Multiply 0.1 RDD by 2",
+			amt:  100e5, // 0.1 RDD
 			mul:  2,
-			res:  200e5, // 0.2 BTC
+			res:  200e5, // 0.2 RDD
 		},
 		{
-			name: "Multiply 0.2 BTC by 0.02",
-			amt:  200e5, // 0.2 BTC
+			name: "Multiply 0.2 RDD by 0.02",
+			amt:  200e5, // 0.2 RDD
 			mul:  1.02,
-			res:  204e5, // 0.204 BTC
+			res:  204e5, // 0.204 RDD
 		},
 		{
-			name: "Multiply 0.1 BTC by -2",
-			amt:  100e5, // 0.1 BTC
+			name: "Multiply 0.1 RDD by -2",
+			amt:  100e5, // 0.1 RDD
 			mul:  -2,
-			res:  -200e5, // -0.2 BTC
+			res:  -200e5, // -0.2 RDD
 		},
 		{
-			name: "Multiply 0.2 BTC by -0.02",
-			amt:  200e5, // 0.2 BTC
+			name: "Multiply 0.2 RDD by -0.02",
+			amt:  200e5, // 0.2 RDD
 			mul:  -1.02,
-			res:  -204e5, // -0.204 BTC
+			res:  -204e5, // -0.204 RDD
 		},
 		{
-			name: "Multiply -0.1 BTC by 2",
-			amt:  -100e5, // -0.1 BTC
+			name: "Multiply -0.1 RDD by 2",
+			amt:  -100e5, // -0.1 RDD
 			mul:  2,
-			res:  -200e5, // -0.2 BTC
+			res:  -200e5, // -0.2 RDD
 		},
 		{
-			name: "Multiply -0.2 BTC by 0.02",
-			amt:  -200e5, // -0.2 BTC
+			name: "Multiply -0.2 RDD by 0.02",
+			amt:  -200e5, // -0.2 RDD
 			mul:  1.02,
-			res:  -204e5, // -0.204 BTC
+			res:  -204e5, // -0.204 RDD
 		},
 		{
-			name: "Multiply -0.1 BTC by -2",
-			amt:  -100e5, // -0.1 BTC
+			name: "Multiply -0.1 RDD by -2",
+			amt:  -100e5, // -0.1 RDD
 			mul:  -2,
-			res:  200e5, // 0.2 BTC
+			res:  200e5, // 0.2 RDD
 		},
 		{
-			name: "Multiply -0.2 BTC by -0.02",
-			amt:  -200e5, // -0.2 BTC
+			name: "Multiply -0.2 RDD by -0.02",
+			amt:  -200e5, // -0.2 RDD
 			mul:  -1.02,
-			res:  204e5, // 0.204 BTC
+			res:  204e5, // 0.204 RDD
 		},
 		{
 			name: "Round down",
@@ -263,9 +248,9 @@ func TestAmountMulF64(t *testing.T) {
 		},
 		{
 			name: "Multiply by 0.",
-			amt:  1e8, // 1 BTC
+			amt:  1e8, // 1 RDD
 			mul:  0,
-			res:  0, // 0 BTC
+			res:  0, // 0 RDD
 		},
 		{
 			name: "Multiply 1 by 0.5.",
