@@ -1,8 +1,10 @@
 btcutil
 =======
 
-[![Build Status](https://travis-ci.org/conformal/btcutil.png?branch=master)]
-(https://travis-ci.org/conformal/btcutil)
+[![Build Status](https://travis-ci.org/reddcoin-project/rddutil.png?branch=master)]
+(https://travis-ci.org/reddcoin-project/rddutil) [![Coverage Status]
+(https://coveralls.io/repos/reddcoin-project/rddutil/badge.png?branch=master)]
+(https://coveralls.io/r/reddcoin-project/rddutil?branch=master)
 
 Package btcutil provides bitcoin-specific convenience functions and types.
 A comprehensive suite of tests is provided to ensure proper functionality.  See
