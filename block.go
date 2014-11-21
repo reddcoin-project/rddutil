@@ -26,7 +26,7 @@ func (e OutOfRangeError) Error() string {
 	return string(e)
 }
 
-// Block defines a bitcoin block that provides easier and more efficient
+// Block defines a Reddcoin block that provides easier and more efficient
 // manipulation of raw blocks.  It also memoizes hashes for the block and its
 // transactions on their first access so subsequent accesses don't have to
 // repeat the relatively expensive hashing operations.
@@ -196,7 +196,7 @@ func (b *Block) SetHeight(height int64) {
 	b.blockHeight = height
 }
 
-// NewBlock returns a new instance of a bitcoin block given an underlying
+// NewBlock returns a new instance of a Reddcoin block given an underlying
 // rddwire.MsgBlock.  See Block.
 func NewBlock(msgBlock *rddwire.MsgBlock) *Block {
 	return &Block{
@@ -205,7 +205,7 @@ func NewBlock(msgBlock *rddwire.MsgBlock) *Block {
 	}
 }
 
-// NewBlockFromBytes returns a new instance of a bitcoin block given the
+// NewBlockFromBytes returns a new instance of a Reddcoin block given the
 // serialized bytes.  See Block.
 func NewBlockFromBytes(serializedBlock []byte) (*Block, error) {
 	br := bytes.NewReader(serializedBlock)
@@ -217,7 +217,7 @@ func NewBlockFromBytes(serializedBlock []byte) (*Block, error) {
 	return b, nil
 }
 
-// NewBlockFromReader returns a new instance of a bitcoin block given a
+// NewBlockFromReader returns a new instance of a Reddcoin block given a
 // Reader to deserialize the block.  See Block.
 func NewBlockFromReader(r io.Reader) (*Block, error) {
 	// Deserialize the bytes into a MsgBlock.
@@ -234,7 +234,7 @@ func NewBlockFromReader(r io.Reader) (*Block, error) {
 	return &b, nil
 }
 
-// NewBlockFromBlockAndBytes returns a new instance of a bitcoin block given
+// NewBlockFromBlockAndBytes returns a new instance of a Reddcoin block given
 // an underlying rddwire.MsgBlock and the serialized bytes for it.  See Block.
 func NewBlockFromBlockAndBytes(msgBlock *rddwire.MsgBlock, serializedBlock []byte) *Block {
 	return &Block{

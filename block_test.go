@@ -355,7 +355,8 @@ var Block100000 = rddwire.MsgBlock{
 					},
 				},
 			},
-			LockTime: 0,
+			LockTime:  0,
+			Timestamp: time.Unix(0, 0),
 		},
 		{
 			Version: 1,
@@ -425,6 +426,7 @@ var Block100000 = rddwire.MsgBlock{
 				},
 			},
 			LockTime: 0,
+			Timestamp: time.Unix(0, 0),
 		},
 		{
 			Version: 1,
@@ -493,6 +495,7 @@ var Block100000 = rddwire.MsgBlock{
 				},
 			},
 			LockTime: 0,
+			Timestamp: time.Unix(0, 0),
 		},
 		{
 			Version: 1,
@@ -549,6 +552,7 @@ var Block100000 = rddwire.MsgBlock{
 				},
 			},
 			LockTime: 0,
+			Timestamp: time.Unix(0, 0),
 		},
 	},
 }
