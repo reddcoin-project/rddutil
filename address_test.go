@@ -34,36 +34,36 @@ func TestAddresses(t *testing.T) {
 		// Positive P2PKH tests.
 		{
 			name:    "mainnet p2pkh",
-			addr:    "1MirQ9bwyQcGVJPwKUgapu5ouK2E2Ey4gX",
-			encoded: "1MirQ9bwyQcGVJPwKUgapu5ouK2E2Ey4gX",
+			addr:    "RkQDYcqiv7mzQfNYMc8FfYv3dtQ8wuSGoM",
+			encoded: "RkQDYcqiv7mzQfNYMc8FfYv3dtQ8wuSGoM",
 			valid:   true,
 			result: rddutil.TstAddressPubKeyHash(
 				[ripemd160.Size]byte{
-					0xe3, 0x4c, 0xce, 0x70, 0xc8, 0x63, 0x73, 0x27, 0x3e, 0xfc,
-					0xc5, 0x4c, 0xe7, 0xd2, 0xa4, 0x91, 0xbb, 0x4a, 0x0e, 0x84},
+					0x81, 0x40, 0x89, 0xfb, 0x90, 0x9f, 0x05, 0x91, 0x8d, 0x54,
+					0xe5, 0x30, 0xf0, 0xad, 0x8e, 0x33, 0x9a, 0x4e, 0xdf, 0xfe},
 				rddnet.MainNetParams.PubKeyHashAddrID),
 			f: func() (rddutil.Address, error) {
 				pkHash := []byte{
-					0xe3, 0x4c, 0xce, 0x70, 0xc8, 0x63, 0x73, 0x27, 0x3e, 0xfc,
-					0xc5, 0x4c, 0xe7, 0xd2, 0xa4, 0x91, 0xbb, 0x4a, 0x0e, 0x84}
+					0x81, 0x40, 0x89, 0xfb, 0x90, 0x9f, 0x05, 0x91, 0x8d, 0x54,
+					0xe5, 0x30, 0xf0, 0xad, 0x8e, 0x33, 0x9a, 0x4e, 0xdf, 0xfe}
 				return rddutil.NewAddressPubKeyHash(pkHash, &rddnet.MainNetParams)
 			},
 			net: &rddnet.MainNetParams,
 		},
 		{
 			name:    "mainnet p2pkh 2",
-			addr:    "12MzCDwodF9G1e7jfwLXfR164RNtx4BRVG",
-			encoded: "12MzCDwodF9G1e7jfwLXfR164RNtx4BRVG",
+			addr:    "RuHTqnboDrgkGdWJSso4EqfkeUDU4tX3sB",
+			encoded: "RuHTqnboDrgkGdWJSso4EqfkeUDU4tX3sB",
 			valid:   true,
 			result: rddutil.TstAddressPubKeyHash(
 				[ripemd160.Size]byte{
-					0x0e, 0xf0, 0x30, 0x10, 0x7f, 0xd2, 0x6e, 0x0b, 0x6b, 0xf4,
-					0x05, 0x12, 0xbc, 0xa2, 0xce, 0xb1, 0xdd, 0x80, 0xad, 0xaa},
+					0xe2, 0xb2, 0xb1, 0x69, 0xc3, 0x62, 0x11, 0x7e, 0x65, 0xb2,
+					0x0c, 0xa7, 0x2c, 0xc0, 0xa9, 0x91, 0x5a, 0x24, 0x60, 0x37},
 				rddnet.MainNetParams.PubKeyHashAddrID),
 			f: func() (rddutil.Address, error) {
 				pkHash := []byte{
-					0x0e, 0xf0, 0x30, 0x10, 0x7f, 0xd2, 0x6e, 0x0b, 0x6b, 0xf4,
-					0x05, 0x12, 0xbc, 0xa2, 0xce, 0xb1, 0xdd, 0x80, 0xad, 0xaa}
+					0xe2, 0xb2, 0xb1, 0x69, 0xc3, 0x62, 0x11, 0x7e, 0x65, 0xb2,
+					0x0c, 0xa7, 0x2c, 0xc0, 0xa9, 0x91, 0x5a, 0x24, 0x60, 0x37}
 				return rddutil.NewAddressPubKeyHash(pkHash, &rddnet.MainNetParams)
 			},
 			net: &rddnet.MainNetParams,
@@ -206,7 +206,7 @@ func TestAddresses(t *testing.T) {
 		{
 			name:    "mainnet p2pk compressed (0x02)",
 			addr:    "02192d74d0cb94344c9569c2e77901573d8d7903c3ebec3a957724895dca52c6b4",
-			encoded: "13CG6SJ3yHUXo4Cr2RY4THLLJrNFuG3gUg",
+			encoded: "Rap4A4UdHHjygVi8X1rW2vwKhd5oJSL8JK",
 			valid:   true,
 			result: rddutil.TstAddressPubKey(
 				[]byte{
@@ -228,7 +228,7 @@ func TestAddresses(t *testing.T) {
 		{
 			name:    "mainnet p2pk compressed (0x03)",
 			addr:    "03b0bd634234abbb1ba1e986e884185c61cf43e001f9137f23c2c409273eb16e65",
-			encoded: "15sHANNUBSh6nDp8XkDPmQcW6n3EFwmvE6",
+			encoded: "RdV5DzZ3VSxYffKR2LXqM4DVVYkma8r9zn",
 			valid:   true,
 			result: rddutil.TstAddressPubKey(
 				[]byte{
@@ -251,7 +251,7 @@ func TestAddresses(t *testing.T) {
 			name: "mainnet p2pk uncompressed (0x04)",
 			addr: "0411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2" +
 				"e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3",
-			encoded: "12cbQLTFMXRnSzktFkuoG3eHoMeFtpTu3S",
+			encoded: "RaEPTxdpfXhELSGAkMEEqhFHC8MoJGobPM",
 			valid:   true,
 			result: rddutil.TstAddressPubKey(
 				[]byte{
@@ -280,7 +280,7 @@ func TestAddresses(t *testing.T) {
 			name: "mainnet p2pk hybrid (0x06)",
 			addr: "06192d74d0cb94344c9569c2e77901573d8d7903c3ebec3a957724895dca52c6b4" +
 				"0d45264838c0bd96852662ce6a847b197376830160c6d2eb5e6a4c44d33f453e",
-			encoded: "1Ja5rs7XBZnK88EuLVcFqYGMEbBitzchmX",
+			encoded: "RrBsvVJ6Va3m1ZkBq5vhRBsLdMuGFzfS1X",
 			valid:   true,
 			result: rddutil.TstAddressPubKey(
 				[]byte{
@@ -309,7 +309,7 @@ func TestAddresses(t *testing.T) {
 			name: "mainnet p2pk hybrid (0x07)",
 			addr: "07b0bd634234abbb1ba1e986e884185c61cf43e001f9137f23c2c409273eb16e65" +
 				"37a576782eba668a7ef8bd3b3cfb1edb7117ab65129b8a2e681f3c1e0908ef7b",
-			encoded: "1ExqMmf6yMxcBMzHjbj41wbqYuqoX6uBLG",
+			encoded: "RnadRPqgHNE44oVaEC3VbbCpwgZLtzue9s",
 			valid:   true,
 			result: rddutil.TstAddressPubKey(
 				[]byte{
